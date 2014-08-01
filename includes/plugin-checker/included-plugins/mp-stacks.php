@@ -26,7 +26,7 @@ if (!function_exists('mp_stacks_plugin_check')){
 		$add_plugins = array(
 			array(
 				'plugin_name' => 'MP Stacks',
-				'plugin_message' => __('You require the MP Stacks plugin. Install it here.', 'mp_stacks_download_grid'),
+				'plugin_message' => __('You require the MP Stacks plugin. Install it here.', 'mp_stacks_downloadgrid'),
 				'plugin_filename' => 'mp-stacks.php',
 				'plugin_download_link' => 'http://mintplugins.com/repo/mp-stacks/?downloadfile=true',
 				'plugin_info_link' => 'http://mintplugins.com/plugins/mp-stacks',

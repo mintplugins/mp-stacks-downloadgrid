@@ -1,10 +1,10 @@
 <?php
 /**
- * This file contains a function which checks if the MP Stacks + PostGrid plugin is installed.
+ * This file contains a function which checks if the MP Stacks + DownloadGrid plugin is installed.
  *
  * @since 1.0.0
  *
- * @package    MP Core + PostGrid
+ * @package    MP Core + DownloadGrid
  * @subpackage Functions
  *
  * @copyright  Copyright (c) 2014, Mint Plugins
@@ -13,22 +13,22 @@
  */
  
 /**
-* Check to make sure the MP Stacks + PostGrid Plugin is installed.
+* Check to make sure the MP Stacks + DownloadGrid Plugin is installed.
 *
 * @since    1.0.0
 * @link     http://mintplugins.com/doc/plugin-checker-class/
 * @return   array $plugins An array of plugins to be installed. This is passed in through the mp_core_check_plugins filter.
 * @return   array $plugins An array of plugins to be installed. This is passed to the mp_core_check_plugins filter. (see link).
 */
-if (!function_exists('mp_stacks_download_grid_plugin_check')){
-	function mp_stacks_download_grid_plugin_check( $plugins ) {
+if (!function_exists('mp_stacks_downloadgrid_plugin_check')){
+	function mp_stacks_downloadgrid_plugin_check( $plugins ) {
 		
 		$add_plugins = array(
 			array(
-				'plugin_name' => 'MP Stacks + PostGrid',
-				'plugin_message' => __('You require the MP Stacks + PostGrid plugin. Install it here.', 'mp_stacks_download_grid'),
-				'plugin_filename' => 'mp-stacks-download-grid.php',
-				'plugin_download_link' => 'http://mintplugins.com/repo/mp-stacks-download-grid/?downloadfile=true',
+				'plugin_name' => 'MP Stacks + DownloadGrid',
+				'plugin_message' => __('You require the MP Stacks + DownloadGrid plugin. Install it here.', 'mp_stacks_downloadgrid'),
+				'plugin_filename' => 'mp-stacks-downloadgrid.php',
+				'plugin_download_link' => 'http://mintplugins.com/repo/mp-stacks-downloadgrid/?downloadfile=true',
 				'plugin_api_url' => 'https://mintplugins.com/',
 				'plugin_info_link' => 'http://mintplugins.com/plugins/mp-stacks',
 				'plugin_group_install' => true,
@@ -42,4 +42,4 @@ if (!function_exists('mp_stacks_download_grid_plugin_check')){
 		return array_merge( $plugins, $add_plugins );
 	}
 }
-add_filter( 'mp_core_check_plugins', 'mp_stacks_download_grid_plugin_check' );
+add_filter( 'mp_core_check_plugins', 'mp_stacks_downloadgrid_plugin_check' );

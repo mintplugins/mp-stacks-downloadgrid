@@ -1,10 +1,10 @@
-=== MP Stacks + PostGrid ===
+=== MP Stacks + DownloadGrid ===
 Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.0.0.4
+Stable tag: 1.0.0.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Extremely simple to set up - allows you to show posts on any page, at any time, 
 
 This section describes how to install the plugin and get it working.
 
-1. Upload the 'mp-stacks-download-grid’ folder to the `/wp-content/plugins/` directory
+1. Upload the 'mp-stacks-downloadgrid’ folder to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. Build Bricks under the “Stacks and Bricks” menu. 
 4. Publish your bricks into a “Stack”.
@@ -33,6 +33,11 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.0.5 = Aug 1, 2014
+* Options added for animation, placement of text, text backgrounds
+* Changed post grid choices to only include post categories for the sake of simplicity
+* Ajax Load More button now changes to “Loading..” when clicked
+
 = 1.0.0.4 = June 8, 2014
 * Mobile Sizing
 * Only create metabox if current screen is mp_brick
@@ -43,7 +48,7 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 * Move To Mint 
 
 = 1.0.0.2 = February 20, 2014
-* Change download_grid to free plugin 
+* Change downloadgrid to free plugin 
 
 = 1.0.0.1 = February 10, 2014
 * Changed hook for metabox to be after taxonomies are created - so we can choose from ALL taxonomies. From 'plugins_loaded' to 'widgets_init'.

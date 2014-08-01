@@ -4,7 +4,7 @@
  *
  * @since 1.0.0
  *
- * @package    MP Stacks Download Grid
+ * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
  * @copyright  Copyright (c) 2014, Mint Plugins
@@ -13,16 +13,16 @@
  */
  
 /**
- * This function hooks to the brick output. If it is supposed to be a 'download_grid', then it will output the download_grid
+ * This function hooks to the brick output. If it is supposed to be a 'downloadgrid', then it will output the downloadgrid
  *
  * @access   public
  * @since    1.0.0
  * @return   void
  */
-function mp_stacks_brick_content_output_download_grid( $default_content_output, $mp_stacks_content_type, $post_id ){
+function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $mp_stacks_content_type, $post_id ){
 	
 	//If this stack content type is set to be a download grid	
-	if ($mp_stacks_content_type != 'download_grid'){
+	if ($mp_stacks_content_type != 'downloadgrid'){
 		
 		return $default_content_output;
 		
@@ -32,81 +32,98 @@ function mp_stacks_brick_content_output_download_grid( $default_content_output, 
 	$content_output = NULL;	
 	
 	//Get Download Taxonomy Term to Loop through
-	$download_grid_taxonomy_term = mp_core_get_post_meta($post_id, 'download_grid_taxonomy_term', '');
+	$downloadgrid_taxonomy_term = mp_core_get_post_meta($post_id, 'downloadgrid_taxonomy_term', '');
 		
 	//Download per row
-	$download_grid_per_row = mp_core_get_post_meta($post_id, 'download_grid_per_row', '3');
+	$downloadgrid_per_row = mp_core_get_post_meta($post_id, 'downloadgrid_per_row', '3');
 	
 	//Download per page
-	$download_grid_per_page = mp_core_get_post_meta($post_id, 'download_grid_per_page', '9');
+	$downloadgrid_per_page = mp_core_get_post_meta($post_id, 'downloadgrid_per_page', '9');
 	
 	//Show Download Images?
-	$download_grid_show_featured_images = mp_core_get_post_meta($post_id, 'download_grid_show_featured_images');
+	$downloadgrid_show_featured_images = mp_core_get_post_meta($post_id, 'downloadgrid_show_featured_images');
 	
 	//Download Image width and height
-	$download_grid_featured_images_width = mp_core_get_post_meta($post_id, 'download_grid_featured_images_width', '300px', array( 'after' => 'px' ) );
-	$download_grid_featured_images_height = mp_core_get_post_meta($post_id, 'download_grid_featured_images_height', '200px', array( 'after' => 'px' ));
+	$downloadgrid_featured_images_width = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_width', '300' );
+	$downloadgrid_featured_images_height = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_height', '200' );
 	
 	//Show Post Titles
-	$download_grid_show_titles = mp_core_get_post_meta($post_id, 'download_grid_show_titles');
+	$downloadgrid_show_titles = mp_core_get_post_meta($post_id, 'downloadgrid_show_titles');
+	
+	//Show Post Title Backgrounds?
+	$downloadgrid_show_title_backgrounds = mp_core_get_post_meta($post_id, 'downloadgrid_show_title_backgrounds');
 	
 	//Titles placement
-	$download_grid_titles_placement = mp_core_get_post_meta($post_id, 'download_grid_titles_placement', 'below_image_left');
+	$downloadgrid_titles_placement = mp_core_get_post_meta($post_id, 'downloadgrid_titles_placement', 'below_image_left');
 	
 	//Show Post Excerpts
-	$download_grid_show_excerpts = mp_core_get_post_meta($post_id, 'download_grid_show_excerpts');
+	$downloadgrid_show_excerpts = mp_core_get_post_meta($post_id, 'downloadgrid_show_excerpts');
 	
 	//Excerpts Placement
-	$download_grid_excerpt_placement = mp_core_get_post_meta($post_id, 'download_grid_excerpt_placement', 'below_image_left');
+	$downloadgrid_excerpt_placement = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_placement', 'below_image_left');
+	
+	//Show Prices
+	$downloadgrid_show_prices = mp_core_get_post_meta( $post_id, 'downloadgrid_show_prices' );
+	
+	//Prices Placements
+	$downloadgrid_price_placement = mp_core_get_post_meta( $post_id, 'downloadgrid_price_placement', 'over_image_top_left' );
 	
 	//Show Load More Button?
-	$download_grid_show_load_more_button = mp_core_get_post_meta($post_id, 'download_grid_show_load_more_button');
+	$downloadgrid_show_load_more_button = mp_core_get_post_meta($post_id, 'downloadgrid_show_load_more_button');
 
 	//Load More Button Text
-	$download_grid_load_more_text = mp_core_get_post_meta($post_id, 'download_grid_load_more_text', __( 'Load More', 'mp_stacks_download_grid' ) );
+	$downloadgrid_load_more_text = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_text', __( 'Load More', 'mp_stacks_downloadgrid' ) );
 	
 	//get word limit for exceprts
-	$word_limit = mp_core_get_post_meta($post_id, 'download_grid_excerpt_word_limit', 20);
+	$word_limit = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_word_limit', 20);
 	
-	$read_more_text = __('...More', 'mp_stacks_download_grid');
+	$read_more_text = __('...', 'mp_stacks_downloadgrid');
 	
 	//Get Download Output
-	$download_grid_output = '<div class="mp-stacks-download-grid">';
+	$downloadgrid_output = '<div class="mp-stacks-downloadgrid">';
 	
 	//Get JS output to animate the titles on mouse over and out
-	$download_grid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-download-grid-item', '.mp-stacks-download-grid-item-title-holder', get_post_meta( $post_id, 'download_grid_title_animation_keyframes', true ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_title_animation_keyframes', array() ) ); 
+	
+	//Get JS output to animate the titles background on mouse over and out
+	if ( $downloadgrid_show_title_backgrounds ){
+		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-background', mp_core_get_post_meta( $post_id, 'downloadgrid_title_background_animation_keyframes', array() ) ); 
+	}
 	
 	//Get JS output to animate the excerpts on mouse over and out
-	$download_grid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-download-grid-item', '.mp-stacks-download-grid-item-excerpt-holder', get_post_meta( $post_id, 'download_grid_excerpt_animation_keyframes', true ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_excerpt_animation_keyframes', array() ) ); 
+	
+	//Get JS output to animate the price on mouse over and out
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-price-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_price_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the images on mouse over and out
-	$download_grid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-download-grid-item', '.mp-stacks-download-grid-item-image', get_post_meta( $post_id, 'download_grid_image_animation_keyframes', true ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the images overlays on mouse over and out
-	$download_grid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-download-grid-item', '.mp-stacks-download-grid-item-image-overlay', get_post_meta( $post_id, 'download_grid_image_overlay_animation_keyframes', true ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
 	
 	//Set counter to 0
 	$counter = 1;
 			
 	//Set the args for the new query
-	$download_grid_args = array(
+	$downloadgrid_args = array(
 		'order' => 'DESC',
-		'posts_per_page' => $download_grid_per_page,
+		'posts_per_page' => $downloadgrid_per_page,
 		'tax_query' => array(
 			'relation' => 'AND',
 			array(
 				'taxonomy' => 'download_category',
 				'field'    => 'id',
-				'terms'    => $download_grid_taxonomy_term,
+				'terms'    => $downloadgrid_taxonomy_term,
 				'operator' => 'IN'
 			)
 		)
 	);	
 		
 	//Create new query for stacks
-	$download_grid_query = new WP_Query( apply_filters( 'download_grid_args', $download_grid_args ) );
+	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
 	
-	$total_posts = $download_grid_query->found_posts;
+	$total_posts = $downloadgrid_query->found_posts;
 	
 	$css_output = NULL;
 	
@@ -114,130 +131,165 @@ function mp_stacks_brick_content_output_download_grid( $default_content_output, 
 	$post_offset = 0;
 	
 	//Loop through the stack group		
-	if ( $download_grid_query->have_posts() ) { 
+	if ( $downloadgrid_query->have_posts() ) { 
 		
-		while( $download_grid_query->have_posts() ) : $download_grid_query->the_post(); 
+		while( $downloadgrid_query->have_posts() ) : $downloadgrid_query->the_post(); 
 		
 				$grid_post_id = get_the_ID();
 		
-				$download_grid_output .= '<div class="mp-stacks-download-grid-item">';
+				$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item">';
 					
 					//If we should show the featured images
-					if ($download_grid_show_featured_images){
+					if ($downloadgrid_show_featured_images){
 						
-						$download_grid_output .= '<div class="mp-stacks-download-grid-item-image-holder">';
+						$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-holder">';
 						
-							$download_grid_output .= '<div class="mp-stacks-download-grid-item-image-overlay"></div>';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-overlay"></div>';
 							
-							$download_grid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-download-grid-image-link">';
+							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-image-link">';
 							
-							$download_grid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $download_grid_featured_images_width, $download_grid_featured_images_height) . '" class="mp-stacks-download-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
+							$downloadgrid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height) . '" class="mp-stacks-downloadgrid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
 							
 							//Top Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-top">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-top">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'top') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'top') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'top') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'top') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'top') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
 							//Middle Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-middle">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-middle">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'middle') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'middle') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'middle') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'middle') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'middle') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
 							//Bottom Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-bottom">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-bottom">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'bottom') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'bottom') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'bottom') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'bottom') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'bottom') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</a>';
+							$downloadgrid_output .= '</a>';
 							
-						$download_grid_output .= '</div>';
+						$downloadgrid_output .= '</div>';
 						
 					}
-					
-					//If we should show the title below the image
-					if ( strpos( $download_grid_titles_placement, 'below') !== false && $download_grid_show_titles){
 						
-						$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
-			
+					//If we should show the title below the image
+					if ( strpos( $downloadgrid_titles_placement, 'below') !== false && $downloadgrid_show_titles){
+						
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-title-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
+						$downloadgrid_output .= '</a>';
+					
 					}
 					//If we should show the excerpt below the image
-					if ( strpos( $download_grid_excerpt_placement, 'below') !== false && $download_grid_show_excerpts){
+					if ( strpos( $downloadgrid_excerpt_placement, 'below') !== false && $downloadgrid_show_excerpts){
 						
-						$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-excerpt-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+						$downloadgrid_output .= '</a>';
+						
 					}
-			
-				$download_grid_output .= '</div>';
+					
+					//If we should show the price over the image
+					if ( strpos( $downloadgrid_price_placement, 'below') !== false && $downloadgrid_show_prices){
+						
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-price-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
+						$downloadgrid_output .= '</a>';
+						
+					}
 				
-				if ( $download_grid_per_row == $counter ){
+				$downloadgrid_output .= '</div>';
+				
+				if ( $downloadgrid_per_row == $counter ){
 					
 					//Add clear div to bump a new row
-					$download_grid_output .= '<div class="mp-stacks-download-grid-item-clearedfix"></div>';
+					$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
 					
 					//Reset counter
 					$counter = 1;
@@ -256,20 +308,20 @@ function mp_stacks_brick_content_output_download_grid( $default_content_output, 
 	}
 	
 	//If there are still more posts in this taxonomy
-	if ( $total_posts > $post_offset && $download_grid_show_load_more_button ){
-		$download_grid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_download_grid_counter="' . $counter . '" class="button mp-stacks-download-grid-load-more-button">' . $download_grid_load_more_text . '</a>';	
+	if ( $total_posts > $post_offset && $downloadgrid_show_load_more_button ){
+		$downloadgrid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a>';	
 	}
 	
-	$download_grid_output .= '</div>';
+	$downloadgrid_output .= '</div>';
 	
 	//Content output
-	$content_output .= $download_grid_output;
+	$content_output .= $downloadgrid_output;
 	
 	//Return
 	return $content_output;
 
 }
-add_filter('mp_stacks_brick_content_output', 'mp_stacks_brick_content_output_download_grid', 10, 3);
+add_filter('mp_stacks_brick_content_output', 'mp_stacks_brick_content_output_downloadgrid', 10, 3);
 
 /**
  * Output more posts using ajax
@@ -278,206 +330,248 @@ add_filter('mp_stacks_brick_content_output', 'mp_stacks_brick_content_output_dow
  * @since    1.0.0
  * @return   void
  */
-function mp_download_grid_ajax_load_more(){
+function mp_downloadgrid_ajax_load_more(){
 			
-	if (!isset( $_POST['mp_stacks_download_grid_post_id'] ) || !isset( $_POST['mp_stacks_download_grid_offset'] ) || !isset( $_POST['mp_stacks_download_grid_counter'] ) ){
+	if (!isset( $_POST['mp_stacks_downloadgrid_post_id'] ) || !isset( $_POST['mp_stacks_downloadgrid_offset'] ) || !isset( $_POST['mp_stacks_downloadgrid_counter'] ) ){
 		return;	
 	}
 	
-	$post_id = $_POST['mp_stacks_download_grid_post_id'];
-	$post_offset = $_POST['mp_stacks_download_grid_offset'];
-	$counter = $_POST['mp_stacks_download_grid_counter'];
+	$post_id = $_POST['mp_stacks_downloadgrid_post_id'];
+	$post_offset = $_POST['mp_stacks_downloadgrid_offset'];
+	$counter = $_POST['mp_stacks_downloadgrid_counter'];
 
 	//Get Download Taxonomy Term to Loop through
-	$download_grid_taxonomy_term = mp_core_get_post_meta($post_id, 'download_grid_taxonomy_term', '');
+	$downloadgrid_taxonomy_term = mp_core_get_post_meta($post_id, 'downloadgrid_taxonomy_term', '');
 		
 	//Download per row
-	$download_grid_per_row = mp_core_get_post_meta($post_id, 'download_grid_per_row', '3');
+	$downloadgrid_per_row = mp_core_get_post_meta($post_id, 'downloadgrid_per_row', '3');
 	
 	//Download per page
-	$download_grid_per_page = mp_core_get_post_meta($post_id, 'download_grid_per_page', '9');
+	$downloadgrid_per_page = mp_core_get_post_meta($post_id, 'downloadgrid_per_page', '9');
 	
 	//Show Download Images?
-	$download_grid_show_featured_images = mp_core_get_post_meta($post_id, 'download_grid_show_featured_images');
+	$downloadgrid_show_featured_images = mp_core_get_post_meta($post_id, 'downloadgrid_show_featured_images');
 	
 	//Download Image width and height
-	$download_grid_featured_images_width = mp_core_get_post_meta($post_id, 'download_grid_featured_images_width', '300px', array( 'after' => 'px' ) );
-	$download_grid_featured_images_height = mp_core_get_post_meta($post_id, 'download_grid_featured_images_height', '200px', array( 'after' => 'px' ));
+	$downloadgrid_featured_images_width = mp_core_get_post_meta($post_id, 'downloadgrid_featured_images_width', '300' );
+	$downloadgrid_featured_images_height = mp_core_get_post_meta($post_id, 'downloadgrid_featured_images_height', '200');
 	
 	//Show Post Titles
-	$download_grid_show_titles = mp_core_get_post_meta($post_id, 'download_grid_show_titles');
+	$downloadgrid_show_titles = mp_core_get_post_meta($post_id, 'downloadgrid_show_titles');
+	
+	//Show Post Title Backgrounds
+	$downloadgrid_show_title_backgrounds = mp_core_get_post_meta($post_id, 'downloadgrid_show_title_backgrounds');
 	
 	//Titles placement
-	$download_grid_titles_placement = mp_core_get_post_meta($post_id, 'download_grid_titles_placement', 'below_image_left');
+	$downloadgrid_titles_placement = mp_core_get_post_meta($post_id, 'downloadgrid_titles_placement', 'below_image_left');
 	
 	//Show Post Excerpts
-	$download_grid_show_excerpts = mp_core_get_post_meta($post_id, 'download_grid_show_excerpts');
+	$downloadgrid_show_excerpts = mp_core_get_post_meta($post_id, 'downloadgrid_show_excerpts');
 	
 	//Excerpts Placement
-	$download_grid_excerpt_placement = mp_core_get_post_meta($post_id, 'download_grid_excerpt_placement', 'below_image_left');
+	$downloadgrid_excerpt_placement = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_placement', 'below_image_left');
+	
+	//Show Prices
+	$downloadgrid_show_prices = mp_core_get_post_meta( $post_id, 'downloadgrid_show_prices' );
+	
+	//Prices Placements
+	$downloadgrid_price_placement = mp_core_get_post_meta( $post_id, 'downloadgrid_price_placement', 'over_image_top_left' );
 	
 	//Show Load More Button?
-	$download_grid_show_load_more_button = mp_core_get_post_meta($post_id, 'download_grid_show_load_more_button');
+	$downloadgrid_show_load_more_button = mp_core_get_post_meta($post_id, 'downloadgrid_show_load_more_button');
 
 	//Load More Button Text
-	$download_grid_load_more_text = mp_core_get_post_meta($post_id, 'download_grid_load_more_text', __( 'Load More', 'mp_stacks_download_grid' ) );
+	$downloadgrid_load_more_text = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_text', __( 'Load More', 'mp_stacks_downloadgrid' ) );
 	
 	//get word limit for exceprts
-	$word_limit = mp_core_get_post_meta($post_id, 'download_grid_excerpt_word_limit', 20);
+	$word_limit = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_word_limit', 20);
 	
-	$read_more_text = __('...More', 'mp_stacks_download_grid');
+	$read_more_text = __('...', 'mp_stacks_downloadgrid');
 	
 	//Set the args for the new query
-	$download_grid_args = array(
+	$downloadgrid_args = array(
 		'order' => 'DESC',
-		'posts_per_page' => $download_grid_per_page,
+		'posts_per_page' => $downloadgrid_per_page,
 		'offset'     =>  $post_offset,
 		'tax_query' => array(
 			'relation' => 'AND',
 			array(
 				'taxonomy' => 'download_category',
 				'field'    => 'id',
-				'terms'    => $download_grid_taxonomy_term,
+				'terms'    => $downloadgrid_taxonomy_term,
 				'operator' => 'IN'
 			)
 		)
 	);	
 		
 	//Create new query for stacks
-	$download_grid_query = new WP_Query( apply_filters( 'download_grid_args', $download_grid_args ) );
+	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
 	
-	$total_posts = $download_grid_query->found_posts;
+	$total_posts = $downloadgrid_query->found_posts;
 	
 	$css_output = NULL;
 	
 	//jQuery Trigger to reset all downloadgrid animations to their first frames
-	$download_grid_output = '<script type="text/javascript">jQuery(document).ready(function($){ $(document).trigger("mp_stacks_download_grid_set_first_keyframe_trigger"); });</script>';
+	$downloadgrid_output = '<script type="text/javascript">jQuery(document).ready(function($){ $(document).trigger("mp_core_animation_set_first_keyframe_trigger"); });</script>';
 	
 	//Loop through the stack group		
-	if ( $download_grid_query->have_posts() ) {
+	if ( $downloadgrid_query->have_posts() ) {
 		
-		while( $download_grid_query->have_posts() ) : $download_grid_query->the_post(); 
+		while( $downloadgrid_query->have_posts() ) : $downloadgrid_query->the_post(); 
 		
 				$grid_post_id = get_the_ID();
 		
-				$download_grid_output .= '<div class="mp-stacks-download-grid-item">';
+				$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item">';
 					
 					//If we should show the featured images
-					if ($download_grid_show_featured_images){
+					if ($downloadgrid_show_featured_images){
 						
-						$download_grid_output .= '<div class="mp-stacks-download-grid-item-image-holder">';
+						$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-holder">';
 						
-							$download_grid_output .= '<div class="mp-stacks-download-grid-item-image-overlay"></div>';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-overlay"></div>';
 							
-							$download_grid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-download-grid-image-link">';
+							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-image-link">';
 							
-							$download_grid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $download_grid_featured_images_width, $download_grid_featured_images_height) . '" class="mp-stacks-download-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
+							$downloadgrid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height) . '" class="mp-stacks-downloadgrid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
 							
 							//Top Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-top">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-top">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'top') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'top') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'top') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'top') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'top') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
 							//Middle Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-middle">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-middle">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'middle') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'middle') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'middle') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'middle') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'middle') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
 							//Bottom Over
-							$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-bottom">';
+							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-bottom">';
 							
-								$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
 								
-									$download_grid_output .= '<div class="mp-stacks-download-grid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
 									
 										//If we should show the title over the image
-										if ( strpos( $download_grid_titles_placement, 'over') !== false && strpos( $download_grid_titles_placement, 'bottom') !== false && $download_grid_show_titles){
+										if ( strpos( $downloadgrid_titles_placement, 'over') !== false && strpos( $downloadgrid_titles_placement, 'bottom') !== false && $downloadgrid_show_titles){
 											
-											$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
+											$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 								
 										}
 										
 										//If we should show the excerpt over the image
-										if ( strpos( $download_grid_excerpt_placement, 'over') !== false && strpos( $download_grid_excerpt_placement, 'bottom') !== false && $download_grid_show_excerpts){
+										if ( strpos( $downloadgrid_excerpt_placement, 'over') !== false && strpos( $downloadgrid_excerpt_placement, 'bottom') !== false && $downloadgrid_show_excerpts){
 											
-											$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+											
+										}
+										
+										//If we should show the price over the image
+										if ( strpos( $downloadgrid_price_placement, 'over') !== false && strpos( $downloadgrid_price_placement, 'bottom') !== false && $downloadgrid_show_prices){
+											
+											$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
 											
 										}
 									
-									$download_grid_output .= '</div>';
+									$downloadgrid_output .= '</div>';
 									
-								$download_grid_output .= '</div>';
+								$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</div>';
+							$downloadgrid_output .= '</div>';
 							
-							$download_grid_output .= '</a>';
+							$downloadgrid_output .= '</a>';
 							
-						$download_grid_output .= '</div>';
+						$downloadgrid_output .= '</div>';
 						
 					}
 					
 					//If we should show the title below the image
-					if ( strpos( $download_grid_titles_placement, 'below') !== false && $download_grid_show_titles){
+					if ( strpos( $downloadgrid_titles_placement, 'below') !== false && $downloadgrid_show_titles){
 						
-						$download_grid_output .= mp_stacks_download_grid_title( $grid_post_id );
-			
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-title-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_title( $grid_post_id );
+						$downloadgrid_output .= '</a>';	
 					}
 					//If we should show the excerpt below the image
-					if ( strpos( $download_grid_excerpt_placement, 'below') !== false && $download_grid_show_excerpts){
+					if ( strpos( $downloadgrid_excerpt_placement, 'below') !== false && $downloadgrid_show_excerpts){
 						
-						$download_grid_output .= mp_stacks_download_grid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-excerpt-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $word_limit, $read_more_text );
+						$downloadgrid_output .= '</a>';	
+					}
+					
+					//If we should show the price below the image
+					if ( strpos( $downloadgrid_price_placement, 'below') !== false && $downloadgrid_show_prices){
+						
+						$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-price-link">';	
+							$downloadgrid_output .= mp_stacks_downloadgrid_price( $grid_post_id );
+						$downloadgrid_output .= '</a>';	
+						
 					}
 			
-				$download_grid_output .= '</div>';
+				$downloadgrid_output .= '</div>';
 				
-				if ( $download_grid_per_row == $counter ){
+				if ( $downloadgrid_per_row == $counter ){
 					
 					//Add clear div to bump a new row
-					$download_grid_output .= '<div class="mp-stacks-download-grid-item-clearedfix"></div>';
+					$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
 					
 					//Reset counter
 					$counter = 1;
@@ -496,19 +590,19 @@ function mp_download_grid_ajax_load_more(){
 	}
 	
 	//If there are still more posts in this taxonomy
-	if ( $total_posts > $post_offset && $download_grid_show_load_more_button ){
-		$download_grid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_download_grid_counter="' . $counter . '" class="button mp-stacks-download-grid-load-more-button">' . $download_grid_load_more_text . '</a>';	
+	if ( $total_posts > $post_offset && $downloadgrid_show_load_more_button ){
+		$downloadgrid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a>';	
 	}
 	
-	$download_grid_output .= '</div>';
+	$downloadgrid_output .= '</div>';
 	
-	echo $download_grid_output;
+	echo $downloadgrid_output;
 	
 	die();
 			
 }
-add_action( 'wp_ajax_mp_stacks_download_grid_load_more', 'mp_download_grid_ajax_load_more' );
-add_action( 'wp_ajax_nopriv_mp_stacks_download_grid_load_more', 'mp_download_grid_ajax_load_more' );
+add_action( 'wp_ajax_mp_stacks_downloadgrid_load_more', 'mp_downloadgrid_ajax_load_more' );
+add_action( 'wp_ajax_nopriv_mp_stacks_downloadgrid_load_more', 'mp_downloadgrid_ajax_load_more' );
 
 /**
  * Get the HTML for the title in the grid
@@ -518,15 +612,14 @@ add_action( 'wp_ajax_nopriv_mp_stacks_download_grid_load_more', 'mp_download_gri
  * @post_id  $post_id Int - The ID of the post to get the title of
  * @return   $html_output String - A string holding the html for a title in the grid
  */
-function mp_stacks_download_grid_title( $post_id ){
+function mp_stacks_downloadgrid_title( $post_id ){
 	
-	$download_grid_output = '<div class="mp-stacks-download-grid-item-title-holder">';
+	$downloadgrid_output = mp_stacks_grid_highlight_text_html( array( 
+		'class_name' => 'mp-stacks-downloadgrid-item-title',
+		'output_string' => get_the_title( $post_id ), 
+	) );
 	
-		$download_grid_output .= get_the_title( $post_id );
-		
-	$download_grid_output .= '</div>';
-	
-	return $download_grid_output;
+	return $downloadgrid_output;
 	
 }
 
@@ -540,10 +633,10 @@ function mp_stacks_download_grid_title( $post_id ){
  * @param    $read_more_text String - The ID of the post to get the title of
  * @return   $html_output String - A string holding the html for an excerpt in the grid
  */
-function mp_stacks_download_grid_excerpt( $post_id, $word_limit, $read_more_text ){
+function mp_stacks_downloadgrid_excerpt( $post_id, $word_limit, $read_more_text ){
 	
-	//Add clear div to bump download_grid below title and icon
-	$download_grid_output = '<div class="mp-stacks-download-grid-item-clearedfix"></div>';
+	//Add clear div to bump downloadgrid below title and icon
+	$downloadgrid_output = '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
 	
 	$the_excerpt = mp_core_get_excerpt_by_id($post_id);
 	
@@ -553,22 +646,49 @@ function mp_stacks_download_grid_excerpt( $post_id, $word_limit, $read_more_text
 		$the_excerpt = mp_core_limit_text_to_words($the_excerpt, $word_limit);
 	}
 	
-	$download_grid_output .= '<div class="mp-stacks-download-grid-item-excerpt-holder">';
-		
-		$download_grid_output .= '<p>' . strip_tags($the_excerpt);
-		
-		//If there is more than 0 words in this excerpt
-		if (mp_core_word_count($the_excerpt) > 0 ){
-			//$download_grid_output .= ' <a href="' . get_permalink($post_id) . '">' . $read_more_text .'</a>';
-		}
-		
-		$download_grid_output .= '</p>';
-			
-	$download_grid_output .= '</div>';
-	
-	//If there is more than 0 words in this excerpt
-	if (mp_core_word_count($the_excerpt) > 0 ){
-		return $download_grid_output;	
+	//If there are 0 words in this excerpt
+	if (mp_core_word_count($the_excerpt) == 0 ){
+		return NULL;	
 	}
+	else{
+		
+		$output_string = strip_tags($the_excerpt);
+	
+		//$output_string .= $read_more_text;
+		
+	}
+	
+	$downloadgrid_output .= mp_stacks_grid_highlight_text_html( array( 
+		'class_name' => 'mp-stacks-downloadgrid-item-excerpt',
+		'output_string' => $output_string, 
+	) );
+	
+	return $downloadgrid_output;	
+
+	
+}
+
+/**
+ * Get the HTML for the price in the grid
+ *
+ * @access   public
+ * @since    1.0.0
+ * @param    $post_id Int - The ID of the post to get the excerpt of
+ * @return   $html_output String - A string holding the html for an excerpt in the grid
+ */
+function mp_stacks_downloadgrid_price( $post_id ){
+	
+	//Add clear div to bump downloadgrid below title and icon
+	$downloadgrid_output = '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
+	
+	$the_price = edd_price( $post_id, false );
+
+	$downloadgrid_output .= mp_stacks_grid_highlight_text_html( array( 
+		'class_name' => 'mp-stacks-downloadgrid-item-price',
+		'output_string' => $the_price, 
+	) );
+	
+	return $downloadgrid_output;	
+
 	
 }
