@@ -21,6 +21,8 @@
  */
 function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $mp_stacks_content_type, $post_id ){
 	
+	global $wp_query;
+	
 	//If this stack content type is set to be a download grid	
 	if ($mp_stacks_content_type != 'downloadgrid'){
 		
@@ -33,12 +35,61 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	
 	//Get Download Taxonomy Term to Loop through
 	$downloadgrid_taxonomy_term = mp_core_get_post_meta($post_id, 'downloadgrid_taxonomy_term', '');
-		
+	
 	//Download per row
 	$downloadgrid_per_row = mp_core_get_post_meta($post_id, 'downloadgrid_per_row', '3');
 	
 	//Download per page
 	$downloadgrid_per_page = mp_core_get_post_meta($post_id, 'downloadgrid_per_page', '9');
+	
+	//If we should show related downloads
+	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
+		
+		$tags = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag' );
+		
+		if ( is_object( $tags ) ){
+			$tags_array = $tags;
+		}
+		elseif (is_array( $tags ) ){
+			$tags_array = $tags[0];
+		}
+		
+		$tag_slugs = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag', array("fields" => "slugs") );
+		
+		$downloadgrid_args = array(
+			'order' => 'DESC',
+			'posts_per_page' => $downloadgrid_per_page,
+			'post_type' => 'download',
+			'post__not_in' => array($wp_query->queried_object_id),
+			'tax_query' => array(
+				array(
+					'taxonomy' => 'download_tag',
+					'field'    => 'slug',
+					'terms'    => $tag_slugs,
+					
+				)
+			)
+		);
+					
+	}
+	//If we should show a download category of the users choosing
+	else{
+		
+		//Set the args for the new query
+		$downloadgrid_args = array(
+			'order' => 'DESC',
+			'posts_per_page' => $downloadgrid_per_page,
+			'tax_query' => array(
+				'relation' => 'AND',
+				array(
+					'taxonomy' => 'download_category',
+					'field'    => 'id',
+					'terms'    => $downloadgrid_taxonomy_term,
+					'operator' => 'IN'
+				)
+			)
+		);		
+	}
 	
 	//Show Download Images?
 	$downloadgrid_show_featured_images = mp_core_get_post_meta($post_id, 'downloadgrid_show_featured_images');
@@ -83,42 +134,27 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	$downloadgrid_output = '<div class="mp-stacks-downloadgrid">';
 	
 	//Get JS output to animate the titles on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_title_animation_keyframes', array() ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_title_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the titles background on mouse over and out
 	if ( $downloadgrid_show_title_backgrounds ){
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-background', mp_core_get_post_meta( $post_id, 'downloadgrid_title_background_animation_keyframes', array() ) ); 
+		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-background', mp_core_get_post_meta( $post_id, 'downloadgrid_title_background_animation_keyframes', array() ) ); 
 	}
 	
 	//Get JS output to animate the excerpts on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_excerpt_animation_keyframes', array() ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-excerpt-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_excerpt_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the price on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-price-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_price_animation_keyframes', array() ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-price-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_price_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the images on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the images overlays on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '.mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
+	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
 	
 	//Set counter to 0
 	$counter = 1;
-			
-	//Set the args for the new query
-	$downloadgrid_args = array(
-		'order' => 'DESC',
-		'posts_per_page' => $downloadgrid_per_page,
-		'tax_query' => array(
-			'relation' => 'AND',
-			array(
-				'taxonomy' => 'download_category',
-				'field'    => 'id',
-				'terms'    => $downloadgrid_taxonomy_term,
-				'operator' => 'IN'
-			)
-		)
-	);	
 		
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
@@ -388,21 +424,56 @@ function mp_downloadgrid_ajax_load_more(){
 	
 	$read_more_text = __('...', 'mp_stacks_downloadgrid');
 	
-	//Set the args for the new query
-	$downloadgrid_args = array(
-		'order' => 'DESC',
-		'posts_per_page' => $downloadgrid_per_page,
-		'offset'     =>  $post_offset,
-		'tax_query' => array(
-			'relation' => 'AND',
-			array(
-				'taxonomy' => 'download_category',
-				'field'    => 'id',
-				'terms'    => $downloadgrid_taxonomy_term,
-				'operator' => 'IN'
+	//If we should show related downloads
+	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
+		
+		$tags = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag' );
+		
+		if ( is_object( $tags ) ){
+			$tags_array = $tags;
+		}
+		elseif (is_array( $tags ) ){
+			$tags_array = $tags[0];
+		}
+		
+		$tag_slugs = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag', array("fields" => "slugs") );
+		
+		$downloadgrid_args = array(
+			'order' => 'DESC',
+			'posts_per_page' => $downloadgrid_per_page,
+			'post_type' => 'download',
+			'offset'     =>  $post_offset,
+			'post__not_in' => array($wp_query->queried_object_id),
+			'tax_query' => array(
+				array(
+					'taxonomy' => 'download_tag',
+					'field'    => 'slug',
+					'terms'    => $tag_slugs,
+					
+				)
 			)
-		)
-	);	
+		);
+					
+	}
+	//If we should show a download category of the users choosing
+	else{
+		
+		//Set the args for the new query
+		$downloadgrid_args = array(
+			'order' => 'DESC',
+			'posts_per_page' => $downloadgrid_per_page,
+			'offset'     =>  $post_offset,
+			'tax_query' => array(
+				'relation' => 'AND',
+				array(
+					'taxonomy' => 'download_category',
+					'field'    => 'id',
+					'terms'    => $downloadgrid_taxonomy_term,
+					'operator' => 'IN'
+				)
+			)
+		);		
+	}
 		
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );

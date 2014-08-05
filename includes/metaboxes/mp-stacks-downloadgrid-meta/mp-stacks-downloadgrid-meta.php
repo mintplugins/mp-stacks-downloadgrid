@@ -50,6 +50,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 	 * Array which stores all info about the options within the metabox
 	 *
 	 */
+	$download_categories = mp_core_get_all_terms_by_tax('download_category'); 
+	$download_categories['related_downloads'] = __('Show Related Downloads based on Tag (only use this if the stack is sitting on a "Download" page).');
+	 
 	$mp_stacks_downloadgrid_items_array = array(
 		array(
 			'field_id'			=> 'downloadgrid_taxonomy_term',
@@ -57,7 +60,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_description' 	=> '<br />' . __( 'Open up the following areas to add/remove new downloadgrid.', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'select',
 			'field_value' => '',
-			'field_select_values' => mp_core_get_all_terms_by_tax('download_category')
+			'field_select_values' => $download_categories
 		),
 		array(
 			'field_id'			=> 'downloadgrid_layout_settings',
@@ -202,7 +205,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_value' => '',
 		),
 		array(
-			'field_id'			=> 'downloadgrid_featured_images_overlay_settings_description',
+			'field_id'			=> 'dl_grid_feat_overlay_img_desc',
 			'field_title' 	=> __( 'What is the Featured Images Overlay?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'It\'s a animate-able solid color which can sit on top of the image when the user\'s mouse hovers over the image. The keyframes to animate the overlay are managed here:', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'basictext',

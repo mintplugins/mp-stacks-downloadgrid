@@ -13,63 +13,6 @@
  */
 
 /**
- * Get the CSS for a text div based on the placement string the user has chosen
- *
- * @access   public
- * @since    1.0.0
- * @param    $placement_string String - A string chosen by the user to specify the position of the title
- * @param    $args Array - An associative array with additional options like image width and height, etc
- * @return   $css_output String - A string containing the CSS for the titles in this grid
- */
-function mp_stacks_downloadgrid_get_text_placement_css( $placement_string, $args ){
-	
-	$css_output = NULL;
-	
-	$text_line_height = $args['downloadgrid_line_height'] / 2 . 'px';
-	
-	if( $placement_string == 'below_image_left' ){
-		
-		$css_output = 'text-align:left; padding-top:' . $text_line_height . ';';
-	}
-	else if(  $placement_string == 'below_image_right' ){
-		$css_output = 'text-align:right; padding-top:' . $text_line_height . ';';
-	}
-	else if(  $placement_string == 'below_image_centered' ){
-		$css_output = 'text-align:center; padding-top:' . $text_line_height . ';';
-	}
-	else if(  $placement_string == 'over_image_top_left' ){
-		$css_output = 'text-align:left; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_top_right' ){
-		$css_output = 'text-align:right; padding:' . $text_line_height . ' 0px';
-	}
-	else if(  $placement_string == 'over_image_top_centered' ){
-		$css_output = 'text-align:center; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_middle_left' ){
-		$css_output = 'text-align:left; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_middle_right' ){
-		$css_output = 'text-align:right; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_middle_centered' ){
-		$css_output = 'text-align:center; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_bottom_left' ){
-		$css_output = 'text-align:left; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_bottom_right' ){
-		$css_output = 'text-align:right; padding:' . $text_line_height . ' 0px;';
-	}
-	else if(  $placement_string == 'over_image_bottom_centered' ){
-		$css_output = 'text-align:center; padding:' . $text_line_height . ' 0px;';
-	}
-	
-	return $css_output;
-		
-}
-
-/**
  * Process the CSS needed for the grid
  *
  * @access   public
@@ -200,13 +143,13 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 			padding: ' . $downloadgrid_post_spacing . 'px;
 		}
 		#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item-title-holder{
-			' . mp_stacks_downloadgrid_get_text_placement_css( $downloadgrid_titles_placement, array( 
-					'downloadgrid_line_height' => ( $downloadgrid_title_size + $downloadgrid_title_leading ),
+			' . mp_stacks_grid_get_text_placement_css( $downloadgrid_titles_placement, array( 
+					'line_height' => ( $downloadgrid_title_leading ),
 				) ) . ';
 	
 			color:' . $downloadgrid_title_color . ';
 			font-size:' . $downloadgrid_title_size . 'px;
-			line-height:' . ( $downloadgrid_title_size ) . 'px;
+			line-height:' . ( $downloadgrid_title_size + $downloadgrid_title_leading ) . 'px;
 		}
 		' . mp_stacks_grid_highlight_text_css( array( 
 				'brick_id' => $post_id,
@@ -217,8 +160,8 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 		) ) . '
 		#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item-excerpt-holder, 
 		#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item-excerpt-holder a{
-			' . mp_stacks_downloadgrid_get_text_placement_css( $downloadgrid_excerpt_placement, array( 
-					'downloadgrid_line_height' => ($downloadgrid_excerpt_size),
+			' . mp_stacks_grid_get_text_placement_css( $downloadgrid_excerpt_placement, array( 
+					'line_height' => ($downloadgrid_excerpt_leading),
 				) ) . ';
 			
 			color:' . $downloadgrid_excerpt_color . ';
@@ -232,9 +175,9 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 				'highlight_color' => $downloadgrid_excerpt_background_color, 
 				'highlight_opacity' => $downloadgrid_excerpt_background_opacity
 		) ) . '
-		#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item-price-holder
-			' . mp_stacks_downloadgrid_get_text_placement_css( $downloadgrid_price_placement, array( 
-					'downloadgrid_line_height' => ($downloadgrid_price_size),
+		#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item-price-holder{
+			' . mp_stacks_grid_get_text_placement_css( $downloadgrid_price_placement, array( 
+					'line_height' => ($downloadgrid_price_leading),
 				) ) . ';
 			
 			color:' . $downloadgrid_price_color . ';
