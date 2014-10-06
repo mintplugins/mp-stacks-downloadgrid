@@ -77,9 +77,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		array(
 			'field_id'			=> 'downloadgrid_post_spacing',
 			'field_title' 	=> __( 'Download Spacing', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How much space would you like to have in between each post in pixels? Default 10', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How much space would you like to have in between each post in pixels? Default 20', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '10',
+			'field_value' => '20',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
 		array(
