@@ -22,17 +22,6 @@
  * @return   void
  */
 function mp_stacks_downloadgrid_create_meta_box(){
-	
-	//Get current page
-	$current_page = get_current_screen();
-	
-	//Only load if we are on an mp_brick page
-	if ( $current_page->id == 'mp_brick' || $current_page->id == 'settings_page_mp_stacks_create_template_page' ){
-		
-	}
-	else{
-		return;	
-	}
 		
 	/**
 	 * Array which stores all info about the new metabox
@@ -74,7 +63,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Downloads Per Row', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many posts do you want from left to right before a new row starts? Default 3', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '3',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
 		array(
@@ -82,7 +71,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Total Downloads', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many posts do you want to show entirely? Default: 9', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '9',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
 		array(
@@ -90,7 +79,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Download Spacing', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How much space would you like to have in between each post in pixels? Default 10', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '10',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
 		array(
@@ -113,7 +102,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Featured Image Width', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How wide should the images be in pixels? Default 300', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '300',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		array(
@@ -121,7 +110,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Featured Image Height', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How high should the images be in pixels? Default 200', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '200',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		array(
@@ -129,7 +118,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Featured Image Inner Margin', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many pixels should the inner margin be for things placed over the featured image? Default 20', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '20',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		//Image animation stuff
@@ -272,7 +261,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Titles\' Placement', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Where would you like to place the title? Default: Below Image, Left', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'select',
-			'field_value' => '',
+			'field_value' => 'below_image_left',
 			'field_select_values' => mp_stacks_downloadgrid_get_text_position_options(),
 			'field_showhider' => 'downloadgrid_title_settings',
 		),
@@ -289,15 +278,15 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Titles\' Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the text size the titles will be. Default: 20', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '20',
 			'field_showhider' => 'downloadgrid_title_settings',
 		),
 		array(
-			'field_id'			=> 'downloadgrid_title_leading',
-			'field_title' 	=> __( 'Titles\' Leading', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Enter the <a href="https://mintplugins.com/wp-content/uploads/2014/07/text-metrics.png" target="_blank">leading</a> height for the excerpt text. Default: 5', 'mp_stacks_downloadgrid' ),
+			'field_id'			=> 'downloadgrid_title_lineheight',
+			'field_title' 	=> __( 'Titles\' Line Height', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 20', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '20',
 			'field_showhider' => 'downloadgrid_title_settings',
 		),
 		array(
@@ -381,9 +370,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		array(
 			'field_id'			=> 'downloadgrid_title_background_padding',
 			'field_title' 	=> __( 'Title Background Size', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How many pixels bigger should the Title Background be than the Text? Default: 0', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How many pixels bigger should the Title Background be than the Text? Default: 5', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '5',
 			'field_showhider' => 'downloadgrid_title_background_settings',
 		),
 		array(
@@ -391,7 +380,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Title Background Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What color should the title background be? Default: #FFF (White)', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'colorpicker',
-			'field_value' => '',
+			'field_value' => '#FFF',
 			'field_showhider' => 'downloadgrid_title_background_settings',
 		),
 		array(
@@ -399,7 +388,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Title Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '100',
 			'field_showhider' => 'downloadgrid_title_background_settings',
 		),
 		
@@ -441,15 +430,15 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Excerpt\'s Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the text size the excerpts will be. Default: 15', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '15',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 		array(
-			'field_id'			=> 'downloadgrid_excerpt_leading',
-			'field_title' 	=> __( 'Excerpt\'s Leading', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Enter the <a href="https://mintplugins.com/wp-content/uploads/2014/07/text-metrics.png" target="_blank">leading</a> height for the excerpt text. Default: 3', 'mp_stacks_downloadgrid' ),
+			'field_id'			=> 'downloadgrid_excerpt_lineheight',
+			'field_title' 	=> __( 'Excerpt\'s Line Height', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 18', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '18',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 		array(
@@ -542,9 +531,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		array(
 			'field_id'			=> 'downloadgrid_excerpt_background_padding',
 			'field_title' 	=> __( 'Excerpt Background Size', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How many pixels bigger should the Excerpt Background be than the Text? Default: 0', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How many pixels bigger should the Excerpt Background be than the Text? Default: 5', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '5',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
 		array(
@@ -552,7 +541,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Excerpt Background Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What color should the excerpt background be? Default: #FFF (White)', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'colorpicker',
-			'field_value' => '',
+			'field_value' => '#FFF',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
 		array(
@@ -560,8 +549,16 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Excerpt Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '100',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
+		),
+		array(
+			'field_id'			=> 'downloadgrid_excerpt_read_more_text',
+			'field_title' 	=> __( '"Read More" Text for Excerpt\'s', 'mp_stacks_postgrid'),
+			'field_description' 	=> __( 'What should the "Read More" text be at the end of the Excerpt? Default: "Read More". Leave blank for no output.', 'mp_stacks_postgrid' ),
+			'field_type' 	=> 'textbox',
+			'field_value' => __( 'Read More', 'mp_stacks_postgrid' ),
+			'field_showhider' => 'postgrid_excerpt_settings',
 		),
 
 		//Price
@@ -582,10 +579,10 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		),
 		array(
 			'field_id'			=> 'downloadgrid_price_placement',
-			'field_title' 	=> __( 'Titles\' Placement', 'mp_stacks_downloadgrid'),
+			'field_title' 	=> __( 'Price Placement', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Where would you like to place the price? Default: Over Image, Top-Left', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'select',
-			'field_value' => '',
+			'field_value' => 'over_image_top_left',
 			'field_select_values' => mp_stacks_downloadgrid_get_text_position_options(),
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
@@ -599,26 +596,10 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		),
 		array(
 			'field_id'			=> 'downloadgrid_price_size',
-			'field_title' 	=> __( 'Price\'s Size', 'mp_stacks_downloadgrid'),
+			'field_title' 	=> __( 'Price Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the text size the prices will be. Default: 15', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
-			'field_showhider' => 'downloadgrid_price_settings',
-		),
-		array(
-			'field_id'			=> 'downloadgrid_price_leading',
-			'field_title' 	=> __( 'Price\'s Leading', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Enter the <a href="https://mintplugins.com/wp-content/uploads/2014/07/text-metrics.png" target="_blank">leading</a> height for the price text. Default: 3', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'number',
-			'field_value' => '',
-			'field_showhider' => 'downloadgrid_price_settings',
-		),
-		array(
-			'field_id'			=> 'downloadgrid_price_word_limit',
-			'field_title' 	=> __( 'Word Limit for Price\'s', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How many words should be displayed before the "Read More" link is shown. Default: All words are shown.', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '15',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
 		//Price animation stuff
@@ -703,9 +684,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		array(
 			'field_id'			=> 'downloadgrid_price_background_padding',
 			'field_title' 	=> __( 'Price Background Size', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How many pixels bigger should the Price Background be than the Text? Default: 1', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How many pixels bigger should the Price Background be than the Text? Default: 5', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_value' => '5',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
 		array(
@@ -713,15 +694,15 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Price Background Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What color should the price background be? Default: #FFF (White)', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'colorpicker',
-			'field_value' => '',
+			'field_value' => '#FFF',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
 		array(
 			'field_id'			=> 'downloadgrid_price_background_opacity',
 			'field_title' 	=> __( 'Price Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'number',
-			'field_value' => '',
+			'field_type' 	=> 'input_range',
+			'field_value' => '100',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
 		
@@ -778,7 +759,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( '"Load More" Text', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What should the "Load More" button say? Default: "Load More"', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'textbox',
-			'field_value' => '',
+			'field_value' => __( 'Load More', 'mp_stacks_downloadgrid' ),
 			'field_showhider' => 'downloadgrid_ajax_load_more_settings',
 		)
 	);
@@ -804,4 +785,4 @@ function mp_stacks_downloadgrid_create_meta_box(){
 	global $mp_stacks_downloadgrid_meta_box;
 	$mp_stacks_downloadgrid_meta_box = new MP_CORE_Metabox($mp_stacks_downloadgrid_add_meta_box, $mp_stacks_downloadgrid_items_array);
 }
-add_action('current_screen', 'mp_stacks_downloadgrid_create_meta_box');
+add_action('mp_brick_metabox', 'mp_stacks_downloadgrid_create_meta_box');
