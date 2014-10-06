@@ -128,7 +128,8 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	//get word limit for exceprts
 	$word_limit = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_word_limit', 20);
 	
-	$read_more_text = __('...', 'mp_stacks_downloadgrid');
+	//Get Read More Text for excerpts
+	$read_more_text = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_read_more_text', __( '...Read More', 'mp_stacks_downloadgrid' ) );
 	
 	//Get Download Output
 	$downloadgrid_output = '<div class="mp-stacks-downloadgrid">';
@@ -422,7 +423,8 @@ function mp_downloadgrid_ajax_load_more(){
 	//get word limit for exceprts
 	$word_limit = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_word_limit', 20);
 	
-	$read_more_text = __('...', 'mp_stacks_downloadgrid');
+	//Get Read More Text for excerpts
+	$read_more_text = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_read_more_text', __( '...Read More', 'mp_stacks_downloadgrid' ) );
 	
 	//If we should show related downloads
 	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
@@ -704,7 +706,7 @@ function mp_stacks_downloadgrid_title( $post_id ){
  * @param    $read_more_text String - The ID of the post to get the title of
  * @return   $html_output String - A string holding the html for an excerpt in the grid
  */
-function mp_stacks_downloadgrid_excerpt( $post_id, $word_limit, $read_more_text ){
+function mp_stacks_downloadgrid_excerpt( $post_id, $word_limit, $read_more_text = NULL ){
 	
 	//Add clear div to bump downloadgrid below title and icon
 	$downloadgrid_output = '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
@@ -724,8 +726,8 @@ function mp_stacks_downloadgrid_excerpt( $post_id, $word_limit, $read_more_text 
 	else{
 		
 		$output_string = strip_tags($the_excerpt);
-	
-		//$output_string .= $read_more_text;
+		
+		$output_string .= !empty( $read_more_text ) ? '<span class="mp-stacks-postgrid-read-more">' . $read_more_text . '</span>' : NULL;
 		
 	}
 	
