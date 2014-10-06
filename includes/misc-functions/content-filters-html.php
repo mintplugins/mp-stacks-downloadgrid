@@ -176,6 +176,16 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 		
 				$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item">';
 					
+					//Microformats
+					$downloadgrid_output .= '
+					<article class="microformats hentry" style="display:none;">
+						<h2 class="entry-title">' . get_the_title() . '</h2>
+						<span class="author vcard"><span class="fn">' . get_the_author() . '</span></span>
+						<time class="published" datetime="' . get_the_time('Y-m-d H:i:s') . '">' . get_the_date() . '</time>
+						<time class="updated" datetime="' . get_the_modified_date('Y-m-d H:i:s') . '">' . get_the_modified_date() .'</time>
+						<div class="entry-summary">' . mp_core_get_excerpt_by_id($grid_post_id) . '</div>
+					</article>';
+					
 					//If we should show the featured images
 					if ($downloadgrid_show_featured_images){
 						
@@ -495,6 +505,16 @@ function mp_downloadgrid_ajax_load_more(){
 				$grid_post_id = get_the_ID();
 		
 				$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item">';
+				
+					//Microformats
+					$downloadgrid_output .= '
+					<article class="microformats hentry" style="display:none;">
+						<h2 class="entry-title">' . get_the_title() . '</h2>
+						<span class="author vcard"><span class="fn">' . get_the_author() . '</span></span>
+						<time class="published" datetime="' . get_the_time('Y-m-d H:i:s') . '">' . get_the_date() . '</time>
+						<time class="updated" datetime="' . get_the_modified_date('Y-m-d H:i:s') . '">' . get_the_modified_date() .'</time>
+						<div class="entry-summary">' . mp_core_get_excerpt_by_id($grid_post_id) . '</div>
+					</article>';
 					
 					//If we should show the featured images
 					if ($downloadgrid_show_featured_images){
