@@ -116,7 +116,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	}
 	
 	//Price Placement
-	$downloadgrid_price_placement = mp_core_get_post_meta($post_id, 'downloadgrid_price_placement', 'below_image_left');
+	$downloadgrid_price_placement = mp_core_get_post_meta($post_id, 'downloadgrid_price_placement', 'over_image_top_left');
 	
 	//Price Color and Size
 	$downloadgrid_price_color = mp_core_get_post_meta($post_id, 'downloadgrid_price_color', 'NULL');
@@ -129,6 +129,10 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	if ( $downloadgrid_show_price_backgrounds ){
 		//Price background spacing (padding)
 		$downloadgrid_price_background_padding = mp_core_get_post_meta($post_id, 'downloadgrid_price_background_padding', '5');	
+		
+			//Calculate Minimum Line Height with Padding
+			$downloadgrid_price_lineheight = ( $downloadgrid_price_background_padding * 3 ) + $downloadgrid_price_size;
+			
 		//Price background color 
 		$downloadgrid_price_background_color = mp_core_get_post_meta($post_id, 'downloadgrid_price_background_color', '#FFFFFF' );	
 		//Price background opacity 
@@ -197,7 +201,8 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 					'line_height' => ($downloadgrid_price_size),
 				) ) . '; ' .
 			mp_core_css_line( 'color', $downloadgrid_price_color ) . 
-			mp_core_css_line( 'font-size', $downloadgrid_price_size, 'px' ) . 
+			mp_core_css_line( 'font-size', $downloadgrid_price_size, 'px' ) .
+			mp_core_css_line( 'line-height', $downloadgrid_price_lineheight, 'px' ) . 
 		'}' . 
 		mp_stacks_grid_highlight_text_css( array( 
 				'brick_id' => $post_id,
