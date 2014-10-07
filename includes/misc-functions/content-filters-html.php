@@ -78,6 +78,7 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 		//Set the args for the new query
 		$downloadgrid_args = array(
 			'order' => 'DESC',
+			'post_status' => 'publish',
 			'posts_per_page' => $downloadgrid_per_page,
 			'tax_query' => array(
 				'relation' => 'AND',
@@ -131,11 +132,8 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	//Get Read More Text for excerpts
 	$read_more_text = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_read_more_text', __( '...Read More', 'mp_stacks_downloadgrid' ) );
 	
-	//Get Download Output
-	$downloadgrid_output = '<div class="mp-stacks-downloadgrid">';
-	
 	//Get JS output to animate the titles on mouse over and out
-	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_title_animation_keyframes', array() ) ); 
+	$downloadgrid_output = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-title-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_title_animation_keyframes', array() ) ); 
 	
 	//Get JS output to animate the titles background on mouse over and out
 	if ( $downloadgrid_show_title_backgrounds ){
@@ -153,6 +151,9 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	
 	//Get JS output to animate the images overlays on mouse over and out
 	$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
+	
+	//Get Download Output
+	$downloadgrid_output .= '<div class="mp-stacks-downloadgrid">';
 	
 	//Set counter to 0
 	$counter = 1;
@@ -354,12 +355,12 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 		endwhile;
 	}
 	
+	$downloadgrid_output .= '</div>';
+	
 	//If there are still more posts in this taxonomy
 	if ( $total_posts > $post_offset && $downloadgrid_show_load_more_button ){
-		$downloadgrid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a>';	
+		$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-load-more-container"><a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a></div>';	
 	}
-	
-	$downloadgrid_output .= '</div>';
 	
 	//Content output
 	$content_output .= $downloadgrid_output;
@@ -473,6 +474,7 @@ function mp_downloadgrid_ajax_load_more(){
 		//Set the args for the new query
 		$downloadgrid_args = array(
 			'order' => 'DESC',
+			'post_status' => 'publish',
 			'posts_per_page' => $downloadgrid_per_page,
 			'offset'     =>  $post_offset,
 			'tax_query' => array(
@@ -494,11 +496,10 @@ function mp_downloadgrid_ajax_load_more(){
 	
 	$css_output = NULL;
 	
-	//jQuery Trigger to reset all downloadgrid animations to their first frames
-	$downloadgrid_output = '<script type="text/javascript">jQuery(document).ready(function($){ $(document).trigger("mp_core_animation_set_first_keyframe_trigger"); });</script>';
-	
 	//Loop through the stack group		
 	if ( $downloadgrid_query->have_posts() ) {
+		
+		$downloadgrid_output = NULL;
 		
 		while( $downloadgrid_query->have_posts() ) : $downloadgrid_query->the_post(); 
 		
@@ -682,14 +683,24 @@ function mp_downloadgrid_ajax_load_more(){
 		endwhile;
 	}
 	
-	//If there are still more posts in this taxonomy
-	if ( $total_posts > $post_offset && $downloadgrid_show_load_more_button ){
-		$downloadgrid_output .= '<a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a>';	
-	}
-	
 	$downloadgrid_output .= '</div>';
 	
-	echo $downloadgrid_output;
+	//jQuery Trigger to reset all downloadgrid animations to their first frames
+	$animation_trigger = '<script type="text/javascript">jQuery(document).ready(function($){ $(document).trigger("mp_core_animation_set_first_keyframe_trigger"); });</script>';
+	
+	//If there are still more posts in this taxonomy
+	if ( $total_posts > $post_offset && $downloadgrid_show_load_more_button ){
+		$ajax_button_output = '<div class="mp-stacks-downloadgrid-load-more-container"><a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_text . '</a></div>';	
+	}
+	else{
+		$ajax_button_output = NULL;	
+	}
+	
+	echo json_encode( array(
+		'items' => $downloadgrid_output,
+		'button' => $ajax_button_output,
+		'animation_trigger' => $animation_trigger
+	) );
 	
 	die();
 			

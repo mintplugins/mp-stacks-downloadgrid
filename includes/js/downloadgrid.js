@@ -1,5 +1,8 @@
 jQuery(document).ready(function($){
 	
+	//Activate Masonry for DownloadGrid Items
+	$('.mp-stacks-downloadgrid').masonry();
+	
 	//Ajax load more posts
 	$( document ).on( 'click', '.mp-stacks-downloadgrid-load-more-button', function(event){
 		
@@ -16,17 +19,22 @@ jQuery(document).ready(function($){
 			mp_stacks_downloadgrid_counter: $(this).attr( 'mp_stacks_downloadgrid_counter' ),
 		}
 		
-		var the_downloadgrid_container = $(this).parent();
-		var the_button = $(this);
+		var the_downloadgrid_container = $(this).parent().prev();
+		var the_button_container = $(this).parent();
 		
 		//Ajax load more posts
 		$.ajax({
 			type: "POST",
 			data: postData,
+			dataType:"json",
 			url: mp_stacks_frontend_vars.ajaxurl,
 			success: function (response) {
 				
-				the_button.replaceWith(response);
+				var $newitems = $(response.items);
+				the_downloadgrid_container.append($newitems).imagesLoaded( function(){ the_downloadgrid_container.masonry('appended', $newitems) });
+				the_button_container.after(response.animation_trigger);
+				the_button_container.replaceWith(response.button);
+				
 			
 			}
 		}).fail(function (data) {
