@@ -108,7 +108,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		array(
 			'field_id'			=> 'downloadgrid_featured_images_height',
 			'field_title' 	=> __( 'Featured Image Height', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How high should the images be in pixels? Default 200', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How high should the images be in pixels? Default 200. Set to 0 to scale height based on width without cropping image.', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '200',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
@@ -181,6 +181,15 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_description' 	=> __( 'Set the Y position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '0',
+			'field_repeater' => 'downloadgrid_image_animation_keyframes',
+			'field_showhider' => 'downloadgrid_featured_images_settings',
+		),
+		array(
+			'field_id'			=> 'scale',
+			'field_title' 	=> __( 'Scale', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( 'Set the Scale % of this Image, in relation to its starting position, at this keyframe. The unit is pixels. Default: 100', 'mp_stacks_downloadgrid' ),
+			'field_type' 	=> 'number',
+			'field_value' => '100',
 			'field_repeater' => 'downloadgrid_image_animation_keyframes',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
@@ -554,11 +563,11 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		),
 		array(
 			'field_id'			=> 'downloadgrid_excerpt_read_more_text',
-			'field_title' 	=> __( '"Read More" Text for Excerpt\'s', 'mp_stacks_postgrid'),
-			'field_description' 	=> __( 'What should the "Read More" text be at the end of the Excerpt? Default: "Read More". Leave blank for no output.', 'mp_stacks_postgrid' ),
+			'field_title' 	=> __( '"Read More" Text for Excerpt\'s', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( 'What should the "Read More" text be at the end of the Excerpt? Default: "Read More". Leave blank for no output.', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'textbox',
-			'field_value' => __( 'Read More', 'mp_stacks_postgrid' ),
-			'field_showhider' => 'postgrid_excerpt_settings',
+			'field_value' => __( 'Read More', 'mp_stacks_downloadgrid' ),
+			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 
 		//Price

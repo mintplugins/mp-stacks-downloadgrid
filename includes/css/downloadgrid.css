@@ -25,6 +25,7 @@
 	position:relative;
 	display:table;	
 	width:100%;
+	overflow:hidden;
 }
 .mp-stacks-downloadgrid-item-image-overlay{
 	position: absolute;
