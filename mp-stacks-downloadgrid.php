@@ -169,6 +169,21 @@ function mp_stacks_downloadgrid_include_files(){
 		 * Misc Functions 
 		 */
 		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/misc-functions.php' );
+		
+		/**
+		 * Include all Grid Title Functions
+		 */
+		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/grid-titles-setup.php' );
+		
+		/**
+		 * Include all Grid Excerpt Functions
+		 */
+		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/grid-excerpts-setup.php' );
+		
+		/**
+		 * Include all Grid Price Functions
+		 */
+		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/grid-prices-setup.php' );
 				
 	}
 }

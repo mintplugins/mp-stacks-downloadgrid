@@ -1,4 +1,5 @@
-.mp-stacks-downloadgrid{
+.mp-stacks-downloadgrid,
+.mp-stacks-downloadgrid .mp-stacks-downloadgrid-item a{
 	display:block;
 }
 .mp-brick[max-width~='600px'] .mp-stacks-downloadgrid{ 
