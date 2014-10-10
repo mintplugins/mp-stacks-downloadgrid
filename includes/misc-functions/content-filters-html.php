@@ -21,8 +21,6 @@
  */
 function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $mp_stacks_content_type, $post_id ){
 	
-	global $wp_query;
-	
 	//If this stack content type is NOT set to be a downloadgrid	
 	if ($mp_stacks_content_type != 'downloadgrid'){
 		
@@ -80,7 +78,12 @@ add_action( 'wp_ajax_nopriv_mp_stacks_downloadgrid_load_more', 'mp_downloadgrid_
  * @param    $post_offset Int - The number of posts deep we are into the loop (if doing ajax). If not doing ajax, set this to 0;
  * @return   Array - HTML output from the Grid Loop, The Load More Button, and the Animation Trigger in an array for usage in either ajax or not.
  */
-function mp_stacks_downloadgrid_output( $post_id, $post_offset ){
+function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
+	
+	global $wp_query;
+	
+	//Get this Brick Info
+	$post = get_post($post_id);
 	
 	$downloadgrid_output = NULL;
 	
@@ -93,6 +96,25 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset ){
 	//Download per page
 	$downloadgrid_per_page = mp_core_get_post_meta($post_id, 'downloadgrid_per_page', '9');
 	
+	//Setup the WP_Query args
+	$downloadgrid_args = array(
+		'order' => 'DESC',
+		'posts_per_page' => $downloadgrid_per_page,
+		'post_type' => 'download',
+		'post__not_in' => array($wp_query->queried_object_id),
+	);
+	
+	//If we are using Offset
+	if ( !empty( $post_offset ) ){
+		//Add offset args to the WP_Query
+		$downloadgrid_args['offset'] = $post_offset;
+	}
+	//If we are using brick pagination and it applies to this brick
+	else if ( isset( $_GET['mp_brick_pagination'] ) && $_GET['mp_brick_pagination'] == $post->post_name ){
+		//Add pagination args to the WP_Query
+		$downloadgrid_args['page'] = $_GET['mp_brick_page'];
+	}
+		
 	//If we should show related downloads
 	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
 		
@@ -107,19 +129,13 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset ){
 		
 		$tag_slugs = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag', array("fields" => "slugs") );
 		
-		$downloadgrid_args = array(
-			'order' => 'DESC',
-			'offset' => $post_offset,
-			'posts_per_page' => $downloadgrid_per_page,
-			'post_type' => 'download',
-			'post__not_in' => array($wp_query->queried_object_id),
-			'tax_query' => array(
-				array(
-					'taxonomy' => 'download_tag',
-					'field'    => 'slug',
-					'terms'    => $tag_slugs,
-					
-				)
+		//Add the related tags as a tax_query to the WP_Query
+		$downloadgrid_args['tax_query'] = array(
+			array(
+				'taxonomy' => 'download_tag',
+				'field'    => 'slug',
+				'terms'    => $tag_slugs,
+				
 			)
 		);
 					
@@ -127,20 +143,14 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset ){
 	//If we should show a download category of the users choosing
 	else{
 		
-		//Set the args for the new query
-		$downloadgrid_args = array(
-			'order' => 'DESC',
-			'offset' => $post_offset,
-			'post_status' => 'publish',
-			'posts_per_page' => $downloadgrid_per_page,
-			'tax_query' => array(
-				'relation' => 'AND',
-				array(
-					'taxonomy' => 'download_category',
-					'field'    => 'id',
-					'terms'    => $downloadgrid_taxonomy_term,
-					'operator' => 'IN'
-				)
+		//Add the category we want to show to the WP_Query
+		$downloadgrid_args['tax_query'] = array(
+			'relation' => 'AND',
+			array(
+				'taxonomy' => 'download_category',
+				'field'    => 'id',
+				'terms'    => $downloadgrid_taxonomy_term,
+				'operator' => 'IN'
 			)
 		);		
 	}
