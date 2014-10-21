@@ -29,10 +29,10 @@ function mp_stacks_brick_content_output_downloadgrid( $default_content_output, $
 	}
 	
 	//Because we run the same function for this and for "Load More" ajax, we call a re-usable function which returns the output
-	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id, 0 );
+	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id );
 	
 	//Return
-	return $downloadgrid_output['downloadgrid_output'] . $downloadgrid_output['load_more_button'];
+	return $downloadgrid_output['downloadgrid_output'] . $downloadgrid_output['load_more_button'] . $downloadgrid_output['downloadgrid_after'];
 
 }
 add_filter('mp_stacks_brick_content_output', 'mp_stacks_brick_content_output_downloadgrid', 10, 3);
@@ -45,16 +45,17 @@ add_filter('mp_stacks_brick_content_output', 'mp_stacks_brick_content_output_dow
  * @return   void
  */
 function mp_downloadgrid_ajax_load_more(){
-			
-	if (!isset( $_POST['mp_stacks_downloadgrid_post_id'] ) || !isset( $_POST['mp_stacks_downloadgrid_offset'] ) || !isset( $_POST['mp_stacks_downloadgrid_counter'] ) ){
+	
+	if ( !isset( $_POST['mp_stacks_grid_post_id'] ) || !isset( $_POST['mp_stacks_grid_offset'] ) || !isset( $_POST['mp_stacks_grid_post_counter'] ) ){
 		return;	
 	}
 	
-	$post_id = $_POST['mp_stacks_downloadgrid_post_id'];
-	$post_offset = $_POST['mp_stacks_downloadgrid_offset'];
+	$post_id = $_POST['mp_stacks_grid_post_id'];
+	$post_offset = $_POST['mp_stacks_grid_offset'];
+	$post_counter = $_POST['mp_stacks_grid_post_counter'];
 
 	//Because we run the same function for this and for "Load More" ajax, we call a re-usable function which returns the output
-	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id, $post_offset );
+	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id, $post_offset, $post_counter );
 	
 	echo json_encode( array(
 		'items' => $downloadgrid_output['downloadgrid_output'],
@@ -78,7 +79,7 @@ add_action( 'wp_ajax_nopriv_mp_stacks_downloadgrid_load_more', 'mp_downloadgrid_
  * @param    $post_offset Int - The number of posts deep we are into the loop (if doing ajax). If not doing ajax, set this to 0;
  * @return   Array - HTML output from the Grid Loop, The Load More Button, and the Animation Trigger in an array for usage in either ajax or not.
  */
-function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
+function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_counter = 1 ){
 	
 	global $wp_query;
 	
@@ -99,6 +100,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	//Setup the WP_Query args
 	$downloadgrid_args = array(
 		'order' => 'DESC',
+		'paged' => 0,
 		'posts_per_page' => $downloadgrid_per_page,
 		'post_type' => 'download',
 		'post__not_in' => array($wp_query->queried_object_id),
@@ -109,10 +111,30 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 		//Add offset args to the WP_Query
 		$downloadgrid_args['offset'] = $post_offset;
 	}
-	//If we are using brick pagination and it applies to this brick
-	else if ( isset( $_GET['mp_brick_pagination'] ) && $_GET['mp_brick_pagination'] == $post->post_name ){
-		//Add pagination args to the WP_Query
-		$downloadgrid_args['page'] = $_GET['mp_brick_page'];
+	//Alternatively, if we are using brick pagination
+	else if ( isset( $wp_query->query['mp_brick_pagination_slugs'] ) ){
+		
+		//Get the brick slug
+		$pagination_brick_slugs = explode( '|||', $wp_query->query['mp_brick_pagination_slugs'] );
+		
+		$pagination_brick_page_numbers = explode( '|||', $wp_query->query['mp_brick_pagination_page_numbers'] );
+		
+		$brick_pagination_counter = 0;
+	
+		//Loop through each brick in the url which has pagination
+		foreach( $pagination_brick_slugs as $brick_slug ){
+			//If this brick is the one we want to paginate
+			if ( $brick_slug == $post->post_name ){
+				//Add page number to the WP_Query
+				$downloadgrid_args['paged'] = $pagination_brick_page_numbers[$brick_pagination_counter];
+				//Set the post offset variable to start at the end of the current page
+				$post_offset = isset( $downloadgrid_args['paged'] ) ? ($downloadgrid_args['paged'] * $downloadgrid_per_page) - $downloadgrid_per_page : 0;
+			}
+			
+			//Increment the counter which aligns $pagination_brick_page_numbers to $pagination_brick_slugs
+			$brick_pagination_counter = $brick_pagination_counter + 1;
+		}
+		
 	}
 		
 	//If we should show related downloads
@@ -165,14 +187,31 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	//Get the options for the grid placement - we pass this to the action filters for text placement
 	$grid_placement_options = apply_filters( 'mp_stacks_downloadgrid_placement_options', NULL, $post_id );
 	
-	//Show Load More Button?
-	$downloadgrid_load_more_button_show = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_show');
-
-	//Load More Button Text
-	$downloadgrid_load_more_button_text = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_text', __( 'Load More', 'mp_stacks_downloadgrid' ) );
-	
 	//Get the JS for animating items - only needed the first time we run this - not on subsequent Ajax requests.
 	if ( !defined('DOING_AJAX') ){
+					
+		//Check if we should apply Masonry to this grid
+		$downloadgrid_masonry = mp_core_get_post_meta( $post_id, 'downloadgrid_masonry' );
+		
+		//If we should apply Masonry to this grid
+		if ( $downloadgrid_masonry ){
+			 
+			//Add Masonry JS 
+			$downloadgrid_output .= '<script type="text/javascript">
+				jQuery(document).ready(function($){ 
+					//Activate Masonry for Grid Items
+					$( "#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid" ).masonry();	
+				});
+				var masonry_grid_' . $post_id . ' = true;
+				</script>';
+		}
+		else{
+			
+			//Set Masonry Variable to False so we know not to refresh masonry upon ajax
+			$downloadgrid_output .= '<script type="text/javascript">
+				var masonry_grid_' . $post_id . ' = false;
+			</script>';	
+		}
 		
 		//Filter Hook which can be used to apply javascript output for items in this grid
 		$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_animation_js', $downloadgrid_output, $post_id );
@@ -186,9 +225,6 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	
 	//Get Download Output
 	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-downloadgrid">' : NULL;
-	
-	//Set counter
-	$counter = isset( $_POST['mp_stacks_postgrid_counter'] ) ? $_POST['mp_stacks_postgrid_counter'] : 1;
 		
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
@@ -286,18 +322,18 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 				
 				$downloadgrid_output .= '</div>';
 				
-				if ( $downloadgrid_per_row == $counter ){
+				if ( $downloadgrid_per_row == $post_counter ){
 					
 					//Add clear div to bump a new row
 					$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
 					
 					//Reset counter
-					$counter = 1;
+					$post_counter = 1;
 				}
 				else{
 					
 					//Increment Counter
-					$counter = $counter + 1;
+					$post_counter = $post_counter + 1;
 					
 				}
 				
@@ -307,23 +343,31 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 		endwhile;
 	}
 	
-	$downloadgrid_output .= !defined('DOING_AJAX') ? '</div>' : NULL;
+	//If we're not doing ajax, add the stuff to close the downloadgrid container and items needed after
+	if ( !defined('DOING_AJAX') ){
+		$downloadgrid_output .= '</div>';
+	}
 	
-	//If there are still more posts in this taxonomy
-	if ( $total_posts > $post_offset && $downloadgrid_load_more_button_show ){
-		$load_more_button = '<div class="mp-stacks-downloadgrid-load-more-container"><a mp_post_id="' . $post_id . '" mp_brick_offset="' . $post_offset . '" mp_stacks_downloadgrid_counter="' . $counter . '" class="button mp-stacks-downloadgrid-load-more-button">' . $downloadgrid_load_more_button_text . '</a></div>';	
-	}
-	else{
-		$load_more_button = NULL;
-	}
 	
 	//jQuery Trigger to reset all downloadgrid animations to their first frames
 	$animation_trigger = '<script type="text/javascript">jQuery(document).ready(function($){ $(document).trigger("mp_core_animation_set_first_keyframe_trigger"); });</script>';
 	
+	//Assemble args for the load more output
+	$load_more_args = array(
+		 'meta_prefix' => 'downloadgrid',
+		 'total_posts' => $total_posts, 
+		 'posts_per_page' => $downloadgrid_per_page, 
+		 'paged' => $downloadgrid_args['paged'], 
+		 'post_counter' => $post_counter, 
+		 'post_offset' => $post_offset,
+		 'brick_slug' => $post->post_name
+	);
+	
 	return array(
 		'downloadgrid_output' => $downloadgrid_output,
-		'load_more_button' => $load_more_button,
-		'animation_trigger' => $animation_trigger
+		'load_more_button' => apply_filters( 'mp_stacks_downloadgrid_load_more_html_output', $load_more_html = NULL, $post_id, $load_more_args ),
+		'animation_trigger' => $animation_trigger,
+		'downloadgrid_after' => '<div class="mp-stacks-downloadgrid-item-clearedfix"></div><div class="mp-stacks-grid-after"></div>'
 	);
 		
 }

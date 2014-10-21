@@ -45,12 +45,6 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	//Use the Excerpt's Color as the default fallback for all text in the grid
 	$default_text_color = mp_core_get_post_meta( $post_id, 'downloadgrid_excerpt_color' );
 	
-	//Load More Buttons Colors
-	$downloadgrid_load_more_button_color = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_color', 'NULL');
-	$downloadgrid_load_more_button_text_color = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_text_color', 'NULL');
-	$downloadgrid_load_more_button_color_mouse_over = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_color_mouse_over', 'NULL');
-	$downloadgrid_load_more_button_text_color_mouse_over = mp_core_get_post_meta($post_id, 'downloadgrid_load_more_button_text_color_mouse_over', 'NULL');
-	
 	//Get CSS Output
 	
 	$css_output = '
@@ -62,14 +56,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	
 	$css_output .= apply_filters( 'mp_stacks_downloadgrid_css', $css_output, $post_id );
 	
-	$css_output .= '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-load-more-button{' . 
-		mp_core_css_line( 'color', $downloadgrid_load_more_button_text_color ) . 
-		mp_core_css_line( 'background-color', $downloadgrid_load_more_button_color ) . 
-	'}
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-load-more-button:hover{' . 
-		mp_core_css_line( 'color', $downloadgrid_load_more_button_text_color_mouse_over ) . 
-		mp_core_css_line( 'background-color', $downloadgrid_load_more_button_color_mouse_over ) . 
-	'}
+	$css_output .= '
 	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container,
 	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container-top,
 	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container-middle,

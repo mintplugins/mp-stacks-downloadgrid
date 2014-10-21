@@ -187,6 +187,11 @@ function mp_stacks_downloadgrid_include_files(){
 		 * Include all Grid Price Functions
 		 */
 		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/grid-prices-setup.php' );
+		
+		/**
+		 * Include all "Load More" Functions
+		 */
+		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/load-more-setup.php' );
 				
 	}
 }

@@ -2,6 +2,11 @@
 /**
  * This file contains the function which set up the Excerpts in the Grid
  *
+ * To use this for additional Text Overlays in a grid, duplicate this file 
+ * 1. Find and replace "downloadgrid" with your plugin's prefix
+ * 2. Find and replace "excerpt" with your desired text overlay name
+ * 3. Make custom changes to the mp_stacks_downloadgrid_excerpt function about what is displayed.
+ *
  * @since 1.0.0
  *
  * @package    MP Stacks DownloadGrid
@@ -18,7 +23,7 @@
  * @access   public
  * @since    1.0.0
  * @param    Void
- * @param    $post_id Int - The ID of the Brick
+ * @param    $items_array Array - The existing Meta Options in this Array
  * @return   Array - All of the placement optons needed for Excerpt
  */
 function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){		
@@ -26,14 +31,14 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 	//Excerpt Settings
 	$new_fields = array(
 		//Excerpt
-		'excerpt_showhider' => array(
+		'downloadgrid_excerpt_showhider' => array(
 			'field_id'			=> 'downloadgrid_excerpt_settings',
 			'field_title' 	=> __( 'Excerpt Settings', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( '', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
-		'excerpt_show' => array(
+		'downloadgrid_excerpt_show' => array(
 			'field_id'			=> 'downloadgrid_excerpt_show',
 			'field_title' 	=> __( 'Show Excerpts?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Do you want to show the Excerpts for these posts?', 'mp_stacks_downloadgrid' ),
@@ -41,7 +46,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => 'true',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_placement' => array(
+		'downloadgrid_excerpt_placement' => array(
 			'field_id'			=> 'downloadgrid_excerpt_placement',
 			'field_title' 	=> __( 'Excerpt Placement', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Where would you like to place the excerpt? Default: Below Image, Left', 'mp_stacks_downloadgrid' ),
@@ -50,7 +55,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_select_values' => mp_stacks_get_text_position_options(),
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_color' => array(
+		'downloadgrid_excerpt_color' => array(
 			'field_id'			=> 'downloadgrid_excerpt_color',
 			'field_title' 	=> __( 'Excerpt Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Select the color the excerpts will be (leave blank for theme default)', 'mp_stacks_downloadgrid' ),
@@ -58,7 +63,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_size' => array(
+		'downloadgrid_excerpt_size' => array(
 			'field_id'			=> 'downloadgrid_excerpt_size',
 			'field_title' 	=> __( 'Excerpt Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the text size the excerpts will be. Default: 15', 'mp_stacks_downloadgrid' ),
@@ -66,7 +71,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '15',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_lineheight' => array(
+		'downloadgrid_excerpt_lineheight' => array(
 			'field_id'			=> 'downloadgrid_excerpt_lineheight',
 			'field_title' 	=> __( 'Excerpt Line Height', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 18', 'mp_stacks_downloadgrid' ),
@@ -74,7 +79,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '18',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_word_limit' => array(
+		'downloadgrid_excerpt_word_limit' => array(
 			'field_id'			=> 'downloadgrid_excerpt_word_limit',
 			'field_title' 	=> __( 'Word Limit for Excerpt', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many words should be displayed before the "Read More" link is shown. Default: All words are shown.', 'mp_stacks_downloadgrid' ),
@@ -83,7 +88,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 		//Excerpt animation stuff
-		'excerpt_animation_desc' => array(
+		'downloadgrid_excerpt_animation_desc' => array(
 			'field_id'			=> 'downloadgrid_excerpt_animation_description',
 			'field_title' 	=> __( 'Animate the Excerpt upon Mouse-Over', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Add keyframe animations to apply to the excerpt and play upon mouse-over.', 'mp_stacks_downloadgrid' ),
@@ -91,7 +96,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_animation_repeater_title' => array(
+		'downloadgrid_excerpt_animation_repeater_title' => array(
 			'field_id'			=> 'downloadgrid_excerpt_animation_repeater_title',
 			'field_title' 	=> __( 'KeyFrame', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> NULL,
@@ -99,7 +104,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_excerpt_animation_keyframes',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_animation_length' => array(
+		'downloadgrid_excerpt_animation_length' => array(
 			'field_id'			=> 'animation_length',
 			'field_title' 	=> __( 'Animation Length', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the length between this keyframe and the previous one in milliseconds. Default: 500', 'mp_stacks_downloadgrid' ),
@@ -109,7 +114,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 			'field_container_class' => 'mp_animation_length',
 		),
-		'excerpt_animation_opacity' => array(
+		'downloadgrid_excerpt_animation_opacity' => array(
 			'field_id'			=> 'opacity',
 			'field_title' 	=> __( 'Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage at this keyframe. Default: 100', 'mp_stacks_downloadgrid' ),
@@ -118,7 +123,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_excerpt_animation_keyframes',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_animation_rotation' => array(
+		'downloadgrid_excerpt_animation_rotation' => array(
 			'field_id'			=> 'rotateZ',
 			'field_title' 	=> __( 'Rotation', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the rotation degree angle at this keyframe. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -127,7 +132,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_excerpt_animation_keyframes',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_animation_x' => array(
+		'downloadgrid_excerpt_animation_x' => array(
 			'field_id'			=> 'translateX',
 			'field_title' 	=> __( 'X Position', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the X position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -136,7 +141,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_excerpt_animation_keyframes',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_animation_y' => array(
+		'downloadgrid_excerpt_animation_y' => array(
 			'field_id'			=> 'translateY',
 			'field_title' 	=> __( 'Y Position', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the Y position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -145,7 +150,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_excerpt_animation_keyframes',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
-		'excerpt_read_more_text' => array(
+		'downloadgrid_excerpt_read_more_text' => array(
 			'field_id'			=> 'downloadgrid_excerpt_read_more_text',
 			'field_title' 	=> __( '"Read More" Text for Excerpt\'s', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What should the "Read More" text be at the end of the Excerpt? Default: "Read More". Leave blank for no output.', 'mp_stacks_downloadgrid' ),
@@ -154,14 +159,14 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 		//Excerpt Background
-		'excerpt_bg_showhider' => array(
+		'downloadgrid_excerpt_bg_showhider' => array(
 			'field_id'			=> 'downloadgrid_excerpt_background_settings',
 			'field_title' 	=> __( 'Excerpt Background Settings', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( '', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
-		'excerpt_bg_show' => array(
+		'downloadgrid_excerpt_bg_show' => array(
 			'field_id'			=> 'downloadgrid_excerpt_background_show',
 			'field_title' 	=> __( 'Show Excerpt Backgrounds?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Do you want to show a background color behind the excerpt?', 'mp_stacks_downloadgrid' ),
@@ -169,7 +174,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
-		'excerpt_bg_size' => array(
+		'downloadgrid_excerpt_bg_size' => array(
 			'field_id'			=> 'downloadgrid_excerpt_background_padding',
 			'field_title' 	=> __( 'Excerpt Background Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many pixels bigger should the Excerpt Background be than the Text? Default: 5', 'mp_stacks_downloadgrid' ),
@@ -177,7 +182,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '5',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
-		'excerpt_bg_color' => array(
+		'downloadgrid_excerpt_bg_color' => array(
 			'field_id'			=> 'downloadgrid_excerpt_background_color',
 			'field_title' 	=> __( 'Excerpt Background Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What color should the excerpt background be? Default: #FFF (White)', 'mp_stacks_downloadgrid' ),
@@ -185,7 +190,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_value' => '#FFF',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
-		'excerpt_bg_opacity' => array(
+		'downloadgrid_excerpt_bg_opacity' => array(
 			'field_id'			=> 'downloadgrid_excerpt_background_opacity',
 			'field_title' 	=> __( 'Excerpt Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
@@ -196,7 +201,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 
 	);
 	
-	return mp_core_insert_meta_fields( $items_array, $new_fields, 'meta_hook_anchor_2' );
+	return mp_core_insert_meta_fields( $items_array, $new_fields, 'downloadgrid_meta_hook_anchor_2' );
 
 }
 add_filter( 'mp_stacks_downloadgrid_items_array', 'mp_stacks_downloadgrid_excerpt_meta_options', 98 );

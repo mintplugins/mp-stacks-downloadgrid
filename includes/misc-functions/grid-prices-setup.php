@@ -1,6 +1,11 @@
 <?php 
 /**
- * This file contains the function which set up the Prices in the Grid
+ * This file contains the function which set up the Prices in the Grid. 
+ *
+ * To use this for additional Text Overlays in a grid, duplicate this file 
+ * 1. Find and replace "downloadgrid" with your plugin's prefix
+ * 2. Find and replace "price" with your desired text overlay name
+ * 3. Make custom changes to the mp_stacks_downloadgrid_price function about what is displayed.
  *
  * @since 1.0.0
  *
@@ -26,14 +31,14 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 	//Price Settings
 	$new_fields = array(
 		//Price
-		'price_showhider' => array(
+		'downloadgrid_price_showhider' => array(
 			'field_id'			=> 'downloadgrid_price_settings',
 			'field_title' 	=> __( 'Price Settings', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( '', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
-		'price_show' => array(
+		'downloadgrid_price_show' => array(
 			'field_id'			=> 'downloadgrid_price_show',
 			'field_title' 	=> __( 'Show Prices?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Do you want to show the Prices for these posts?', 'mp_stacks_downloadgrid' ),
@@ -41,7 +46,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => 'true',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_placement' => array(
+		'downloadgrid_price_placement' => array(
 			'field_id'			=> 'downloadgrid_price_placement',
 			'field_title' 	=> __( 'Price Placement', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Where would you like to place the price? Default: Over Image, Top-Left', 'mp_stacks_downloadgrid' ),
@@ -50,7 +55,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_select_values' => mp_stacks_get_text_position_options(),
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_color' => array(
+		'downloadgrid_price_color' => array(
 			'field_id'			=> 'downloadgrid_price_color',
 			'field_title' 	=> __( 'Price\' Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Select the color the prices will be. Default: #000 (Black)', 'mp_stacks_downloadgrid' ),
@@ -58,7 +63,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => '#000',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_size' => array(
+		'downloadgrid_price_size' => array(
 			'field_id'			=> 'downloadgrid_price_size',
 			'field_title' 	=> __( 'Price Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the text size the prices will be. Default: 15', 'mp_stacks_downloadgrid' ),
@@ -67,7 +72,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
 		//Price animation stuff
-		'price_animation_desc' => array(
+		'downloadgrid_price_animation_desc' => array(
 			'field_id'			=> 'downloadgrid_price_animation_description',
 			'field_title' 	=> __( 'Animate the Price upon Mouse-Over', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Add keyframe animations to apply to the price and play upon mouse-over.', 'mp_stacks_downloadgrid' ),
@@ -75,7 +80,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => '',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_animation_repeater_title' => array(
+		'downloadgrid_price_animation_repeater_title' => array(
 			'field_id'			=> 'downloadgrid_price_animation_repeater_title',
 			'field_title' 	=> __( 'KeyFrame', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> NULL,
@@ -83,7 +88,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_price_animation_keyframes',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_animation_length' => array(
+		'downloadgrid_price_animation_length' => array(
 			'field_id'			=> 'animation_length',
 			'field_title' 	=> __( 'Animation Length', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the length between this keyframe and the previous one in milliseconds. Default: 500', 'mp_stacks_downloadgrid' ),
@@ -93,7 +98,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_price_settings',
 			'field_container_class' => 'mp_animation_length',
 		),
-		'price_animation_opacity' => array(
+		'downloadgrid_price_animation_opacity' => array(
 			'field_id'			=> 'opacity',
 			'field_title' 	=> __( 'Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage at this keyframe. Default: 100', 'mp_stacks_downloadgrid' ),
@@ -102,7 +107,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_price_animation_keyframes',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_animation_rotation' => array(
+		'downloadgrid_price_animation_rotation' => array(
 			'field_id'			=> 'rotateZ',
 			'field_title' 	=> __( 'Rotation', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the rotation degree angle at this keyframe. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -111,7 +116,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_price_animation_keyframes',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_animation_x' => array(
+		'downloadgrid_price_animation_x' => array(
 			'field_id'			=> 'translateX',
 			'field_title' 	=> __( 'X Position', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the X position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -120,7 +125,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_repeater' => 'downloadgrid_price_animation_keyframes',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
-		'price_animation_y' => array(
+		'downloadgrid_price_animation_y' => array(
 			'field_id'			=> 'translateY',
 			'field_title' 	=> __( 'Y Position', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the Y position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
@@ -130,14 +135,14 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
 		//Price Background
-		'price_bg_showhider' => array(
+		'downloadgrid_price_bg_showhider' => array(
 			'field_id'			=> 'downloadgrid_price_background_settings',
 			'field_title' 	=> __( 'Price Background Settings', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( '', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
-		'price_bg_show' => array(
+		'downloadgrid_price_bg_show' => array(
 			'field_id'			=> 'downloadgrid_price_background_show',
 			'field_title' 	=> __( 'Show Price Backgrounds?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Do you want to show a background color behind the price?', 'mp_stacks_downloadgrid' ),
@@ -145,7 +150,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => 'true',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
-		'price_bg_size' => array(
+		'downloadgrid_price_bg_size' => array(
 			'field_id'			=> 'downloadgrid_price_background_padding',
 			'field_title' 	=> __( 'Price Background Size', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How many pixels bigger should the Price Background be than the Text? Default: 5', 'mp_stacks_downloadgrid' ),
@@ -153,7 +158,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => '5',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
-		'price_bg_color' => array(
+		'downloadgrid_price_bg_color' => array(
 			'field_id'			=> 'downloadgrid_price_background_color',
 			'field_title' 	=> __( 'Price Background Color', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'What color should the price background be? Default: #FFF (White)', 'mp_stacks_downloadgrid' ),
@@ -161,7 +166,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => '#FFF',
 			'field_showhider' => 'downloadgrid_price_background_settings',
 		),
-		'price_bg_opacity' => array(
+		'downloadgrid_price_bg_opacity' => array(
 			'field_id'			=> 'downloadgrid_price_background_opacity',
 			'field_title' 	=> __( 'Price Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
@@ -172,7 +177,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 
 	);
 	
-	return mp_core_insert_meta_fields( $items_array, $new_fields, 'meta_hook_anchor_2' );
+	return mp_core_insert_meta_fields( $items_array, $new_fields, 'downloadgrid_meta_hook_anchor_2' );
 
 }
 add_filter( 'mp_stacks_downloadgrid_items_array', 'mp_stacks_downloadgrid_price_meta_options', 97 );
