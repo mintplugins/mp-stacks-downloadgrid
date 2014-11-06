@@ -200,7 +200,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 			$downloadgrid_output .= '<script type="text/javascript">
 				jQuery(document).ready(function($){ 
 					//Activate Masonry for Grid Items
-					$( "#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid" ).masonry();	
+					$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).masonry();	
 				});
 				var masonry_grid_' . $post_id . ' = true;
 				</script>';
@@ -217,14 +217,14 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_animation_js', $downloadgrid_output, $post_id );
 		
 		//Get JS output to animate the images on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
+		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
 		
 		//Get JS output to animate the images overlays on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
+		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
 	}
 	
 	//Get Download Output
-	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-downloadgrid">' : NULL;
+	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-grid">' : NULL;
 		
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
@@ -240,7 +240,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		
 				$grid_post_id = get_the_ID();
 		
-				$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item">';
+				$downloadgrid_output .= '<div class="mp-stacks-grid-item">';
 					
 					//Microformats
 					$downloadgrid_output .= '
@@ -255,20 +255,20 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 					//If we should show the featured images
 					if ($downloadgrid_featured_images_show){
 						
-						$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-holder">';
+						$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-holder">';
 						
-							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-image-overlay"></div>';
+							$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
-							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-image-link">';
+							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link">';
 							
-							$downloadgrid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height) . '" class="mp-stacks-downloadgrid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
+							$downloadgrid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height) . '" class="mp-stacks-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
 							
 							//Top Over
-							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-top">';
+							$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-top">';
 							
-								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table">';
 								
-									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table-cell">';
 										
 										//Filter Hook to output HTML into the "Top" and "Over" position on the featured Image
 										$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_top_over', NULL, $grid_post_id, $grid_placement_options );
@@ -280,11 +280,11 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 							$downloadgrid_output .= '</div>';
 							
 							//Middle Over
-							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-middle">';
+							$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-middle">';
 							
-								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table">';
 								
-									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table-cell">';
 									
 										//Filter Hook to output HTML into the "Middle" and "Over" position on the featured Image
 										$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_middle_over', NULL, $grid_post_id, $grid_placement_options );
@@ -296,11 +296,11 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 							$downloadgrid_output .= '</div>';
 							
 							//Bottom Over
-							$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-bottom">';
+							$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-bottom">';
 							
-								$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table">';
+								$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table">';
 								
-									$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-over-image-text-container-table-cell">';
+									$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-table-cell">';
 										
 										//Filter Hook to output HTML into the "Bottom" and "Over" position on the featured Image
 										$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_bottom_over', NULL, $grid_post_id, $grid_placement_options );
@@ -325,7 +325,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 				if ( $downloadgrid_per_row == $post_counter ){
 					
 					//Add clear div to bump a new row
-					$downloadgrid_output .= '<div class="mp-stacks-downloadgrid-item-clearedfix"></div>';
+					$downloadgrid_output .= '<div class="mp-stacks-grid-item-clearedfix"></div>';
 					
 					//Reset counter
 					$post_counter = 1;
@@ -367,7 +367,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		'downloadgrid_output' => $downloadgrid_output,
 		'load_more_button' => apply_filters( 'mp_stacks_downloadgrid_load_more_html_output', $load_more_html = NULL, $post_id, $load_more_args ),
 		'animation_trigger' => $animation_trigger,
-		'downloadgrid_after' => '<div class="mp-stacks-downloadgrid-item-clearedfix"></div><div class="mp-stacks-grid-after"></div>'
+		'downloadgrid_after' => '<div class="mp-stacks-grid-item-clearedfix"></div><div class="mp-stacks-grid-after"></div>'
 	);
 		
 }

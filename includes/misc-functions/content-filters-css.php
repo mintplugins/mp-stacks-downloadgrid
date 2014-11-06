@@ -48,7 +48,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	//Get CSS Output
 	
 	$css_output = '
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item{' . 
+	#mp-brick-' . $post_id . ' .mp-stacks-grid-item{' . 
 			mp_core_css_line( 'color', $default_text_color ) . 
 			mp_core_css_line( 'width', (100/$downloadgrid_per_row), '%' ) . 
 			mp_core_css_line( 'padding', $downloadgrid_post_spacing, 'px' ) . 
@@ -57,10 +57,10 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	$css_output .= apply_filters( 'mp_stacks_downloadgrid_css', $css_output, $post_id );
 	
 	$css_output .= '
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container,
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container-top,
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container-middle,
-	#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-over-image-text-container-bottom{' . 
+	#mp-brick-' . $post_id . ' .mp-stacks-grid-over-image-text-container,
+	#mp-brick-' . $post_id . ' .mp-stacks-grid-over-image-text-container-top,
+	#mp-brick-' . $post_id . ' .mp-stacks-grid-over-image-text-container-middle,
+	#mp-brick-' . $post_id . ' .mp-stacks-grid-over-image-text-container-bottom{' . 
 		mp_core_css_line( 'padding', $downloadgrid_featured_images_inner_margin, 'px' ) . 
 	'}';
 	
