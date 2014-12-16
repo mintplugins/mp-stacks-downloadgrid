@@ -158,7 +158,8 @@ function mp_stacks_downloadgrid_include_files(){
 		 */
 		if ( function_exists('mp_stacks_developer_textdomain') ){
 			function mp_stacks_downloadgrid_add_active( $required_add_ons ){
-				return $required_add_ons['mp_stacks_downloadgrid'] = 'MP Stacks + DownloadGrid';
+				$required_add_ons['mp_stacks_downloadgrid'] = 'MP Stacks + DownloadGrid';
+				return $required_add_ons;
 			}
 			add_filter( 'mp_stacks_active_add_ons', 'mp_stacks_downloadgrid_add_active' );
 		}

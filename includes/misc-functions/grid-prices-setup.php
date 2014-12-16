@@ -325,7 +325,7 @@ add_filter( 'mp_stacks_downloadgrid_below', 'mp_stacks_downloadgrid_price_below_
 function mp_stacks_downloadgrid_price_animation_js( $downloadgrid_output, $post_id ){
 	
 	//Get JS output to animate the prices on mouse over and out
-	$price_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-downloadgrid-item', '.mp-stacks-downloadgrid-item-price-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_price_animation_keyframes', array() ) ); 
+	$price_animation_js = mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-downloadgrid-item-price-holder', mp_core_get_post_meta( $post_id, 'downloadgrid_price_animation_keyframes', array() ) ); 
 
 	return $downloadgrid_output . $price_animation_js;
 }
