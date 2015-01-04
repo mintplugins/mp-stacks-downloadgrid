@@ -146,7 +146,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 			$tags_array = $tags;
 		}
 		elseif (is_array( $tags ) ){
-			$tags_array = $tags[0];
+			$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
 		}
 		
 		$tag_slugs = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag', array("fields" => "slugs") );
@@ -200,7 +200,9 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 			$downloadgrid_output .= '<script type="text/javascript">
 				jQuery(document).ready(function($){ 
 					//Activate Masonry for Grid Items
-					$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).masonry();	
+					$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).imagesLoaded(function(){
+						$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).masonry();
+					});
 				});
 				var masonry_grid_' . $post_id . ' = true;
 				</script>';
