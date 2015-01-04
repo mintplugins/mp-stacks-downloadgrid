@@ -227,7 +227,7 @@ function mp_stacks_downloadgrid_excerpt_placement_options( $placement_options, $
 	$placement_options['word_limit'] = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_word_limit', 20);
 	
 	//Get Read More Text for excerpts
-	$placement_options['read_more_text'] = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_read_more_text', __( '...Read More', 'mp_stacks_downloadgrid' ) );
+	$placement_options['read_more_text'] = mp_core_get_post_meta($post_id, 'downloadgrid_excerpt_read_more_text', '' );
 	
 	return $placement_options;	
 }
