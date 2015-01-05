@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.0.0.5
+Stable tag: 1.0.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,10 +33,14 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.0.6 = January 5, 2015
+* Big overhaul to have better meta options, and use MP Stacks grid functions.
+* This release coincides with MP Stacks 1.0.1.4  
+
 = 1.0.0.5 = Aug 1, 2014
 * Options added for animation, placement of text, text backgrounds
 * Changed post grid choices to only include post categories for the sake of simplicity
-* Ajax Load More button now changes to “Loading..” when clicked
+* Ajax Load More button now changes to Loading.. when clicked
 
 = 1.0.0.4 = June 8, 2014
 * Mobile Sizing
@@ -48,7 +52,7 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 * Move To Mint 
 
 = 1.0.0.2 = February 20, 2014
-* Change downloadgrid to free plugin 
+* Utility release
 
 = 1.0.0.1 = February 10, 2014
 * Changed hook for metabox to be after taxonomies are created - so we can choose from ALL taxonomies. From 'plugins_loaded' to 'widgets_init'.
