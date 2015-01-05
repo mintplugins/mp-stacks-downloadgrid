@@ -83,6 +83,21 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 	
 	global $wp_query;
 	
+	//Start up the PHP session if there isn't one already
+	if( !session_id() ){
+		session_start();
+	}
+	
+	//If we are NOT doing ajax get the parent's post id from the wp_query.
+	if ( !defined( 'DOING_AJAX' ) ){
+		$queried_object_id = $wp_query->queried_object_id;
+		$_SESSION['mp_stacks_downloadgrid_queryobjid_' . $post_id] = $queried_object_id;
+	}
+	//If we are doing ajax, get the parent's post id from the PHP session where it was stored on initial the page load.
+	else{
+		$queried_object_id = $_SESSION['mp_stacks_downloadgrid_queryobjid_' . $post_id];
+	}
+	
 	//Get this Brick Info
 	$post = get_post($post_id);
 	
@@ -103,7 +118,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		'paged' => 0,
 		'posts_per_page' => $downloadgrid_per_page,
 		'post_type' => 'download',
-		'post__not_in' => array($wp_query->queried_object_id),
+		'post__not_in' => array($queried_object_id),
 	);
 	
 	//If we are using Offset
@@ -140,7 +155,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 	//If we should show related downloads
 	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
 		
-		$tags = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag' );
+		$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
 		
 		if ( is_object( $tags ) ){
 			$tags_array = $tags;
@@ -149,7 +164,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 			$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
 		}
 		
-		$tag_slugs = wp_get_post_terms( $wp_query->queried_object_id, 'download_tag', array("fields" => "slugs") );
+		$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
 		
 		//Add the related tags as a tax_query to the WP_Query
 		$downloadgrid_args['tax_query'] = array(
