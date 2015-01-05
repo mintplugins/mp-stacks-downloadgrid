@@ -25,7 +25,7 @@
 			'software_name' => 'MP Stacks + DownloadGrid', //<- The exact name of this Plugin.
 			'software_api_url' => 'http://mintplugins.com',//The URL where DownloadGrid and mp_repo are installed and checked
 			'software_filename' => 'mp-stacks-downloadgrid.php',
-			'software_licensed' => false, //<-Boolean
+			'software_licensed' => true, //<-Boolean
 		);
 		
 		//Since this is a plugin, call the Plugin Updater class
