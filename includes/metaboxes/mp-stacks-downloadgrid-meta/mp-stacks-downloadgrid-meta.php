@@ -116,17 +116,17 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		'downloadgrid_feat_img_width' => array(
 			'field_id'			=> 'downloadgrid_featured_images_width',
 			'field_title' 	=> __( 'Featured Image Width', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How wide should the images be in pixels? Default 300', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How wide should the images be in pixels? Default 500', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '300',
+			'field_value' => '500',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		'downloadgrid_feat_img_height' => array(
 			'field_id'			=> 'downloadgrid_featured_images_height',
 			'field_title' 	=> __( 'Featured Image Height', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'How high should the images be in pixels? Default 200. Set to 0 to scale height based on width without cropping image.', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'How high should the images be in pixels? Default 0. Set to 0 to scale without cropping the image.', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '200',
+			'field_value' => '0',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		'downloadgrid_feat_img_inner_margin' => array(

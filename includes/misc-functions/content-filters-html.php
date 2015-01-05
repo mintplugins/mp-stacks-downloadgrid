@@ -181,8 +181,8 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 	$downloadgrid_featured_images_show = mp_core_get_post_meta($post_id, 'downloadgrid_featured_images_show');
 	
 	//Download Image width and height
-	$downloadgrid_featured_images_width = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_width', '300' );
-	$downloadgrid_featured_images_height = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_height', '200' );
+	$downloadgrid_featured_images_width = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_width', '500' );
+	$downloadgrid_featured_images_height = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_height', '0' );
 	
 	//Get the options for the grid placement - we pass this to the action filters for text placement
 	$grid_placement_options = apply_filters( 'mp_stacks_downloadgrid_placement_options', NULL, $post_id );
@@ -263,7 +263,15 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 							
 							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link">';
 							
-							$downloadgrid_output .= '<img src="' . mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height) . '" class="mp-stacks-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
+							//Get the featured image and crop according to the user's specs
+							if ( $downloadgrid_featured_images_height > 0 && !empty( $downloadgrid_featured_images_height ) ){
+								$featured_image = mp_core_the_featured_image($grid_post_id, $downloadgrid_featured_images_width, $downloadgrid_featured_images_height);
+							}
+							else{
+								$featured_image = mp_core_the_featured_image( $grid_post_id, $downloadgrid_featured_images_width );	
+							}
+							 
+							$downloadgrid_output .= '<img src="' . $featured_image . '" class="mp-stacks-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
 							
 							//Top Over
 							$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-top">';
