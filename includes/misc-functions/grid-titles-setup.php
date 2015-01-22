@@ -176,7 +176,7 @@ function mp_stacks_downloadgrid_title_meta_options( $items_array ){
 			'field_id'			=> 'downloadgrid_title_background_opacity',
 			'field_title' 	=> __( 'Title Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'number',
+			'field_type' 	=> 'input_range',
 			'field_value' => '100',
 			'field_showhider' => 'downloadgrid_title_background_settings',
 		)
