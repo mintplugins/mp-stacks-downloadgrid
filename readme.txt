@@ -33,6 +33,11 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.0.7 = January 21, 2015
+* Fix plugin_licensed to true for Theme Bundles
+* Add the title attribute to the feat image
+* Switch opacity control for title and excerpt bg to input range (was number)
+
 = 1.0.0.6 = January 5, 2015
 * Big overhaul to have better meta options, and use MP Stacks grid functions.
 * This release coincides with MP Stacks 1.0.1.4  
