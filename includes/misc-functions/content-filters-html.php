@@ -276,7 +276,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 						
 							$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
-							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link">';
+							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
 							
 							//Get the featured image and crop according to the user's specs
 							if ( $downloadgrid_featured_images_height > 0 && !empty( $downloadgrid_featured_images_height ) ){
@@ -286,7 +286,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 								$featured_image = mp_core_the_featured_image( $grid_post_id, $downloadgrid_featured_images_width );	
 							}
 							 
-							$downloadgrid_output .= '<img src="' . $featured_image . '" class="mp-stacks-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" />';
+							$downloadgrid_output .= '<img src="' . $featured_image . '" class="mp-stacks-grid-item-image" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '" />';
 							
 							//Top Over
 							$downloadgrid_output .= '<div class="mp-stacks-grid-over-image-text-container-top">';
