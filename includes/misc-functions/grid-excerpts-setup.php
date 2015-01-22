@@ -194,7 +194,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_id'			=> 'downloadgrid_excerpt_background_opacity',
 			'field_title' 	=> __( 'Excerpt Background Opacity', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Set the opacity percentage? Default: 100', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'number',
+			'field_type' 	=> 'input_range',
 			'field_value' => '100',
 			'field_showhider' => 'downloadgrid_excerpt_background_settings',
 		),
