@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 3.8.1
-Stable tag: 1.0.0.7
+Stable tag: 1.0.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,10 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.8 = February 1, 2015
+* Changed label for Image height to Crop Height
+* Changed plugin info link in bundle utility file
 
 = 1.0.0.7 = January 21, 2015
 * Fix plugin_licensed to true for Theme Bundles
