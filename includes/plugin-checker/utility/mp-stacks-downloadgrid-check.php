@@ -30,7 +30,7 @@ if (!function_exists('mp_stacks_downloadgrid_plugin_check')){
 				'plugin_filename' => 'mp-stacks-downloadgrid.php',
 				'plugin_download_link' => 'http://mintplugins.com/repo/mp-stacks-downloadgrid/?downloadfile=true',
 				'plugin_api_url' => 'https://mintplugins.com/',
-				'plugin_info_link' => 'http://mintplugins.com/plugins/mp-stacks',
+				'plugin_info_link' => 'http://mintplugins.com/plugins/mp-stacks-downloadgrid/',
 				'plugin_group_install' => true,
 				'plugin_licensed' => true,
 				'plugin_licensed_parent_name' => 'Change me to the name of the Parent Plugin',
