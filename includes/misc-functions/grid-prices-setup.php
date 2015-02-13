@@ -342,7 +342,7 @@ add_filter( 'mp_stacks_downloadgrid_animation_js', 'mp_stacks_downloadgrid_price
 function mp_stacks_downloadgrid_price_css( $css_output, $post_id ){
 	
 	$price_css_defaults = array(
-		'color' => NULL,
+		'color' => '#000',
 		'size' => 15,
 		'lineheight' => 15,
 		'background_padding' => 5,
