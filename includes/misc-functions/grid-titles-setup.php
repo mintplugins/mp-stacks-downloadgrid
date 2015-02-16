@@ -78,6 +78,14 @@ function mp_stacks_downloadgrid_title_meta_options( $items_array ){
 			'field_value' => '20',
 			'field_showhider' => 'downloadgrid_title_settings',
 		),
+		'downloadgrid_title_spacing' => array(
+			'field_id'			=> 'downloadgrid_title_spacing',
+			'field_title' 	=> __( 'Titles\' Spacing', 'mp_stacks_postgrid'),
+			'field_description' 	=> __( 'How much space should there be between the title and other text content (price, excerpt, etc)? Default: 10', 'mp_stacks_postgrid' ),
+			'field_type' 	=> 'number',
+			'field_value' => '10',
+			'field_showhider' => 'downloadgrid_title_settings',
+		),
 		'downloadgrid_title_animation_desc' => array(
 			'field_id'			=> 'downloadgrid_title_animation_description',
 			'field_title' 	=> __( 'Animate the Title upon Mouse-Over', 'mp_stacks_downloadgrid'),
@@ -350,6 +358,7 @@ function mp_stacks_downloadgrid_title_css( $css_output, $post_id ){
 		'color' => NULL,
 		'size' => 20,
 		'lineheight' => 20,
+		'padding_top' => 10, //aka 'spacing'
 		'background_padding' => 5,
 		'background_color' => '#fff',
 		'background_opacity' => 100,

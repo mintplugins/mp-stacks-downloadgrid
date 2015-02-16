@@ -71,6 +71,14 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 			'field_value' => '15',
 			'field_showhider' => 'downloadgrid_price_settings',
 		),
+		'downloadgrid_price_spacing' => array(
+			'field_id'			=> 'downloadgrid_price_spacing',
+			'field_title' 	=> __( 'Prices\' Spacing', 'mp_stacks_postgrid'),
+			'field_description' 	=> __( 'How much space should there be between the price and other text content (title, excerpt, etc)? Default: 10', 'mp_stacks_postgrid' ),
+			'field_type' 	=> 'number',
+			'field_value' => '10',
+			'field_showhider' => 'downloadgrid_price_settings',
+		),
 		//Price animation stuff
 		'downloadgrid_price_animation_desc' => array(
 			'field_id'			=> 'downloadgrid_price_animation_description',
@@ -345,6 +353,7 @@ function mp_stacks_downloadgrid_price_css( $css_output, $post_id ){
 		'color' => '#000',
 		'size' => 15,
 		'lineheight' => 15,
+		'padding_top' => 10, //aka 'spacing'
 		'background_padding' => 5,
 		'background_color' => '#fff',
 		'background_opacity' => 100,
