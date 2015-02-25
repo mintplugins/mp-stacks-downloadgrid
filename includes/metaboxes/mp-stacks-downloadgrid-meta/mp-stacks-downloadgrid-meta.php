@@ -47,14 +47,34 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		//Use this to add new options at this point with the filter hook
 		'downloadgrid_meta_hook_anchor_0' => array( 'field_type' => 'hook_anchor'),
 		
-		'downloadgrid_tax_term' => array(
-			'field_id'			=> 'downloadgrid_taxonomy_term',
-			'field_title' 	=> __( 'Select the Download Category you want to show', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Open up the following areas to add/remove new downloadgrid.', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'select',
+		'downloadgrid_taxonomy_showhider' => array(
+			'field_id'			=> 'downloadgrid_taxonomy_showhider',
+			'field_title' 	=> __( 'Download Categories', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( '', 'mp_stacks_downloadgrid' ),
+			'field_type' 	=> 'showhider',
 			'field_value' => '',
-			'field_select_values' => $download_categories
 		),
+			'downloadgrid_taxonomy_terms' => array(
+				'field_id'			=> 'taxonomy_term',
+				'field_title' 	=> __( 'Select a Category or Tag you want to show', 'mp_stacks_downloadgrid'),
+				'field_description' 	=> __( 'What posts should be shown in the Download Grid?', 'mp_stacks_downloadgrid' ),
+				'field_type' 	=> 'select',
+				'field_value' => '',
+				'field_select_values' => $download_categories,
+				'field_repeater' => 'downloadgrid_taxonomy_terms',
+				'field_showhider' => 'downloadgrid_taxonomy_showhider'
+			),
+			'downloadgrid_taxonomy_bg_color' => array(
+				'field_id'			=> 'taxonomy_bg_color',
+				'field_title' 	=> __( 'Background Color for these posts (Optional).', 'mp_stacks_downloadgrid'),
+				'field_description' 	=> __( 'If you want these posts to have a background color, select it here. If not, leave this clear.', 'mp_stacks_downloadgrid' ),
+				'field_type' 	=> 'colorpicker',
+				'field_value' => '',
+				'field_repeater' => 'downloadgrid_taxonomy_terms',
+				'field_showhider' => 'downloadgrid_taxonomy_showhider'
+			),
+			
+		
 		'downloadgrid_layout_showhider' => array(
 			'field_id'			=> 'downloadgrid_layout_settings',
 			'field_title' 	=> __( 'Grid Layout Settings', 'mp_stacks_downloadgrid'),
@@ -102,17 +122,9 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_value' => '0',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
-		'downloadgrid_post_background_color' => array(
-			'field_id'			=> 'downloadgrid_post_background_color',
-			'field_title' 	=> __( 'Download Background Color', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Leave this blank to have the background be transparent.', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'colorpicker',
-			'field_value' => '',
-			'field_showhider' => 'downloadgrid_layout_settings',
-		),
 		//Bg animation stuff
-		'downloadgrid_bg_color_settings' => array(
-			'field_id'			=> 'downloadgrid_bg_color_settings',
+		'downloadgrid_bg_settings' => array(
+			'field_id'			=> 'downloadgrid_bg_settings',
 			'field_title' 	=> __( 'Animate the Background', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Control the animations of the background when the user\'s mouse is over it by adding keyframes here:', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'showhider',
@@ -120,77 +132,77 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
 			//Background color animation
-			'downloadgrid_bg_color_animation_repeater_title' => array(
-				'field_id'			=> 'downloadgrid_bg_color_animation_repeater_title',
+			'downloadgrid_bg_animation_repeater_title' => array(
+				'field_id'			=> 'downloadgrid_bg_animation_repeater_title',
 				'field_title' 	=> __( 'KeyFrame', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> NULL,
 				'field_type' 	=> 'repeatertitle',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_length' => array(
+			'downloadgrid_bg_animation_length' => array(
 				'field_id'			=> 'animation_length',
 				'field_title' 	=> __( 'Animation Length', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the length between this keyframe and the previous one in milliseconds. Default: 500', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'number',
 				'field_value' => '500',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 				'field_container_class' => 'mp_animation_length',
 			),
-			'downloadgrid_bg_color_animation_backgroundColorAlpha' => array(
+			'downloadgrid_bg_animation_backgroundColorAlpha' => array(
 				'field_id'			=> 'backgroundColorAlpha',
 				'field_title' 	=> __( 'Background Opacity', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the opacity percentage for the background color at this keyframe. Default: 100', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'input_range',
 				'field_value' => '100',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_color' => array(
+			'downloadgrid_bg_animation_color' => array(
 				'field_id'			=> 'backgroundColor',
 				'field_title' 	=> __( 'Color', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the color for the background at this keyframe. Default: 100', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'colorpicker',
 				'field_value' => '',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_rotation' => array(
+			'downloadgrid_bg_animation_rotation' => array(
 				'field_id'			=> 'rotateZ',
 				'field_title' 	=> __( 'Rotation', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the rotation degree angle at this keyframe. Default: 0', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'number',
 				'field_value' => '0',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_x' => array(
+			'downloadgrid_bg_animation_x' => array(
 				'field_id'			=> 'translateX',
 				'field_title' 	=> __( 'X Position', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the X position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'number',
 				'field_value' => '0',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_y' => array(
+			'downloadgrid_bg_animation_y' => array(
 				'field_id'			=> 'translateY',
 				'field_title' 	=> __( 'Y Position', 'mp_stacks_downloadgrid'),
 				'field_description' 	=> __( 'Set the Y position, in relation to its starting position, at this keyframe. The unit is pixels. Default: 0', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'number',
 				'field_value' => '0',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
-			'downloadgrid_bg_color_animation_scale' => array(
+			'downloadgrid_bg_animation_scale' => array(
 				'field_id'			=> 'scale',
 				'field_title' 	=> __( 'Scale', 'mp_stacks_downloadgrid'),
-				'field_description' 	=> __( 'Set the Scale % of this Image, in relation to its starting position, at this keyframe. The unit is pixels. Default: 100', 'mp_stacks_downloadgrid' ),
+				'field_description' 	=> __( 'Set the Scale % of this Download, in relation to its starting position, at this keyframe. The unit is pixels. Default: 100', 'mp_stacks_downloadgrid' ),
 				'field_type' 	=> 'number',
 				'field_value' => '100',
-				'field_repeater' => 'downloadgrid_bg_color_animation_keyframes',
-				'field_showhider' => 'downloadgrid_bg_color_settings',
+				'field_repeater' => 'downloadgrid_bg_animation_keyframes',
+				'field_showhider' => 'downloadgrid_bg_settings',
 			),
 		
 		'downloadgrid_masonry' => array(

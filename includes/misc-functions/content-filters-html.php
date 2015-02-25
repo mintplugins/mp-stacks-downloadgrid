@@ -106,6 +106,9 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 	//Get Download Taxonomy Term to Loop through
 	$downloadgrid_taxonomy_term = mp_core_get_post_meta($post_id, 'downloadgrid_taxonomy_term', '');
 	
+	//Get taxonomy term repeater (new way)
+	$downloadgrid_taxonomy_terms = mp_core_get_post_meta($post_id, 'downloadgrid_taxonomy_terms', '');
+	
 	//Download per row
 	$downloadgrid_per_row = mp_core_get_post_meta($post_id, 'downloadgrid_per_row', '3');
 	
@@ -120,6 +123,9 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		'posts_per_page' => $downloadgrid_per_page,
 		'post_type' => 'download',
 		'post__not_in' => array($queried_object_id),
+		'tax_query' => array(
+			'relation' => 'OR',
+		)
 	);
 	
 	//If we are using Offset
@@ -153,44 +159,85 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		
 	}
 		
-	//If we should show related downloads
-	if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
+	//If there are tax terms selected to show (the "new" way with multiple terms)
+	if ( is_array( $downloadgrid_taxonomy_terms ) && !empty( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] ) ){
 		
-		$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+		//Loop through each term the user added to this downloadgrid
+		foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
 		
-		if ( is_object( $tags ) ){
-			$tags_array = $tags;
+			//If we should show related downloads
+			if ( $downloadgrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
+				
+				$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+				
+				if ( is_object( $tags ) ){
+					$tags_array = $tags;
+				}
+				elseif (is_array( $tags ) ){
+					$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+				}
+				
+				$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
+				
+				//Add the related tags as a tax_query to the WP_Query
+				$downloadgrid_args['tax_query'][] = array(
+					'taxonomy' => 'download_tag',
+					'field'    => 'slug',
+					'terms'    => $tag_slugs,
+				);
+							
+			}
+			//If we should show a download category of the users choosing
+			else{
+				
+				//Add the category we want to show to the WP_Query
+				$downloadgrid_args['tax_query'][] = array(
+					'taxonomy' => 'download_category',
+					'field'    => 'id',
+					'terms'    => $downloadgrid_taxonomy_term['taxonomy_term'],
+					'operator' => 'IN'
+				);		
+			}
 		}
-		elseif (is_array( $tags ) ){
-			$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
-		}
-		
-		$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
-		
-		//Add the related tags as a tax_query to the WP_Query
-		$downloadgrid_args['tax_query'] = array(
-			array(
+	}
+	//if there is a single tax term to show (this is backward compatibility for before the terms selector was repeatable.
+	else if( !empty( $downloadgrid_taxonomy_term ) ){
+		//If we should show related downloads
+		if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
+			
+			$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+			
+			if ( is_object( $tags ) ){
+				$tags_array = $tags;
+			}
+			elseif (is_array( $tags ) ){
+				$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+			}
+			
+			$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
+			
+			//Add the related tags as a tax_query to the WP_Query
+			$downloadgrid_args['tax_query'][] = array(
 				'taxonomy' => 'download_tag',
 				'field'    => 'slug',
 				'terms'    => $tag_slugs,
-				
-			)
-		);
-					
-	}
-	//If we should show a download category of the users choosing
-	else{
-		
-		//Add the category we want to show to the WP_Query
-		$downloadgrid_args['tax_query'] = array(
-			'relation' => 'AND',
-			array(
+			);
+						
+		}
+		//If we should show a download category of the users choosing
+		else{
+			
+			//Add the category we want to show to the WP_Query
+			$downloadgrid_args['tax_query'][] = array(
 				'taxonomy' => 'download_category',
 				'field'    => 'id',
 				'terms'    => $downloadgrid_taxonomy_term,
 				'operator' => 'IN'
-			)
-		);		
+			);		
+		}
+	}
+	else{
+		return false;	
 	}
 	
 	//Show Download Images?
@@ -241,7 +288,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
 		
 		//Get JS output to animate the background on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-inner',mp_core_get_post_meta( $post_id, 'downloadgrid_bg_color_animation_keyframes', array() ) ); 
+		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-inner',mp_core_get_post_meta( $post_id, 'downloadgrid_bg_animation_keyframes', array() ) ); 
 		
 	}
 	
@@ -261,8 +308,39 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL, $post_cou
 		while( $downloadgrid_query->have_posts() ) : $downloadgrid_query->the_post(); 
 		
 				$grid_post_id = get_the_ID();
-		
-				$downloadgrid_output .= '<div class="mp-stacks-grid-item"><div class="mp-stacks-grid-item-inner">';
+						
+				//Reset Grid Classes String
+				$grid_item_classes = NULL;
+				$grid_item_inner_bg_color_style_tag = NULL;
+				$grid_item_inner_bg_color = NULL;
+				
+				//If there are multiple tax terms selected to show
+				if ( is_array( $downloadgrid_taxonomy_terms ) && !empty( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] ) ){					
+					
+					//Loop through each term the user added to this downloadgrid
+					foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
+																		
+						//If the current post has this term, make that term one of the classes for the grid item
+						if ( has_term( $downloadgrid_taxonomy_term['taxonomy_term'], 'download_category', $grid_post_id ) ){
+								
+							$term_slug = get_term_by( 'id', $downloadgrid_taxonomy_term['taxonomy_term'] , 'download_category' );
+							$grid_item_classes .= ' ' . $term_slug->slug . ' ';
+							
+							if ( !empty( $downloadgrid_taxonomy_term['taxonomy_bg_color'] ) ){
+								$grid_item_inner_bg_color_style_tag = '<style type="text/css" scoped>#mp-brick-' . $post_id . ' .mp-stacks-grid-item-' . $grid_post_id . ' .mp-stacks-grid-item-inner{ background-color:' . $downloadgrid_taxonomy_term['taxonomy_bg_color'] . ';</style>';
+								$grid_item_inner_bg_color = $downloadgrid_taxonomy_term['taxonomy_bg_color'];
+							}
+							
+						}
+						
+					}
+				}
+				
+				$downloadgrid_output .= '<div class="mp-stacks-grid-item mp-stacks-grid-item-' . $grid_post_id . $grid_item_classes . '">';
+					$downloadgrid_output .= '<div class="mp-stacks-grid-item-inner" ' . (!empty( $grid_item_inner_bg_color ) ? 'mp-default-bg-color="' . $grid_item_inner_bg_color . '"' : NULL) . '>';
+					
+					//Css style tag which applies the user-chosen background color to this post.
+					$downloadgrid_output .= $grid_item_inner_bg_color_style_tag;
 					
 					//Microformats
 					$downloadgrid_output .= '
