@@ -74,7 +74,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 		'downloadgrid_excerpt_lineheight' => array(
 			'field_id'			=> 'downloadgrid_excerpt_lineheight',
 			'field_title' 	=> __( 'Excerpt Line Height', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 18', 'mp_stacks_downloadgrid' ),
+			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 19', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '19',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
