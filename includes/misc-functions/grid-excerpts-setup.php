@@ -76,7 +76,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_title' 	=> __( 'Excerpt Line Height', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Enter the line height for the excerpt text. Default: 18', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'number',
-			'field_value' => '18',
+			'field_value' => '19',
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
 		'downloadgrid_excerpt_spacing' => array(
@@ -403,7 +403,7 @@ function mp_stacks_downloadgrid_excerpt_css( $css_output, $post_id ){
 	$excerpt_css_defaults = array(
 		'color' => NULL,
 		'size' => 15,
-		'lineheight' => 18,
+		'lineheight' => 19,
 		'background_padding' => 5,
 		'background_color' => '#fff',
 		'background_opacity' => 100,
