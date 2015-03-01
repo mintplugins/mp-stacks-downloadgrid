@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 3.8.1
-Stable tag: 1.0.0.8
+Tested up to: 4.1
+Stable tag: 1.0.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,15 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.0.9 = March 1, 2015
+* Made defaults more accurate to coincide with efficiency changes in mp_core.
+* Post Bg Controls Added
+* Spacing between text items added
+* Velocity JS updated to use velocity.min.js instead of jquery.velocity.min.js in MP_CORE.
+* Multiple Taxonomy Terms Added. You can now choose multiple sources.
+* Better line height presets set for titles and excerpts.
+* Added max-width option for grid images.
 
 = 1.0.0.8 = February 1, 2015
 * Changed label for Image height to Crop Height
