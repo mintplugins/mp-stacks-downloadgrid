@@ -82,7 +82,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 		'downloadgrid_excerpt_spacing' => array(
 			'field_id'			=> 'downloadgrid_excerpt_spacing',
 			'field_title' 	=> __( 'Excerpts\' Spacing', 'mp_stacks_postgrid'),
-			'field_description' 	=> __( 'How much space should there be between the excerpt and other text content (title, price, etc)? Default: 10', 'mp_stacks_postgrid' ),
+			'field_description' 	=> __( 'How much space should there be between the excerpt and anything directly above it? Default: 10', 'mp_stacks_postgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '10',
 			'field_showhider' => 'downloadgrid_excerpt_settings',

@@ -45,6 +45,10 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	$downloadgrid_images_overlay_color = mp_core_get_post_meta($post_id, 'downloadgrid_images_overlay_color', '#FFF' );
 	$downloadgrid_images_overlay_opacity = mp_core_get_post_meta($post_id, 'downloadgrid_images_overlay_opacity', '0' );
 	
+	//Max Image Width
+	$downloadgrid_feat_img_max_width = mp_core_get_post_meta($post_id, 'downloadgrid_feat_img_max_width', '0' );
+	$img_max_width_css = empty( $downloadgrid_feat_img_max_width ) ? NULL : '#mp-brick-' . $post_id . ' .mp-stacks-grid-item-image-holder{ max-width: ' . $downloadgrid_feat_img_max_width . 'px;}';
+	
 	//Padding for items directly under the image
 	$downloadgrid_post_below_image_area_inner_margin = mp_core_get_post_meta( $post_id, 'downloadgrid_post_below_image_area_inner_margin', '0' );
 	
@@ -61,7 +65,8 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	'}
 	#mp-brick-' . $post_id . ' .mp-stacks-grid-item-inner{' . 
 			mp_core_css_line( 'padding', $downloadgrid_post_inner_margin, 'px' ) . '
-	}
+	}' . 
+	$img_max_width_css . '
 	#mp-brick-' . $post_id . ' .mp-stacks-grid-item-inner .mp-stacks-grid-item-below-image-holder{' . 
 			mp_core_css_line( 'padding', $downloadgrid_post_below_image_area_inner_margin, 'px' ) . '
 	}

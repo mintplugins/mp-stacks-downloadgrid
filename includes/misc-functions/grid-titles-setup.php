@@ -81,7 +81,7 @@ function mp_stacks_downloadgrid_title_meta_options( $items_array ){
 		'downloadgrid_title_spacing' => array(
 			'field_id'			=> 'downloadgrid_title_spacing',
 			'field_title' 	=> __( 'Titles\' Spacing', 'mp_stacks_postgrid'),
-			'field_description' 	=> __( 'How much space should there be between the title and other text content (price, excerpt, etc)? Default: 10', 'mp_stacks_postgrid' ),
+			'field_description' 	=> __( 'How much space should there be between the title and anything directly above it? Default: 10', 'mp_stacks_postgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '10',
 			'field_showhider' => 'downloadgrid_title_settings',

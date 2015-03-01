@@ -74,7 +74,7 @@ function mp_stacks_downloadgrid_price_meta_options( $items_array ){
 		'downloadgrid_price_spacing' => array(
 			'field_id'			=> 'downloadgrid_price_spacing',
 			'field_title' 	=> __( 'Prices\' Spacing', 'mp_stacks_postgrid'),
-			'field_description' 	=> __( 'How much space should there be between the price and other text content (title, excerpt, etc)? Default: 10', 'mp_stacks_postgrid' ),
+			'field_description' 	=> __( 'How much space should there be between the price and anything directly above it? Default: 10', 'mp_stacks_postgrid' ),
 			'field_type' 	=> 'number',
 			'field_value' => '10',
 			'field_showhider' => 'downloadgrid_price_settings',
