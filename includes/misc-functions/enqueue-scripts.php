@@ -27,18 +27,27 @@
  */
 function mp_stacks_downloadgrid_enqueue_scripts(){
 	
+	//Enqueue MP stacks Grid CSS
+	wp_enqueue_style( 'mp-stacks-grid-css', MP_STACKS_PLUGIN_URL . 'includes/css/mp-stacks-grid-styles.css', MP_STACKS_VERSION );
+	
+	//Enqueue Font Awesome CSS
+	wp_enqueue_style( 'fontawesome', plugins_url( '/fonts/font-awesome-4.0.3/css/font-awesome.css', dirname( __FILE__ ) ) );
+	
 	//Enqueue velocity JS
 	wp_enqueue_script( 'velocity_js', MP_CORE_JS_SCRIPTS_URL . 'velocity.min.js', array( 'jquery' ), MP_STACKS_DOWNLOADGRID_VERSION );
 	
 	//Enqueue Waypoints JS
 	wp_enqueue_script( 'waypoints_js', MP_CORE_JS_SCRIPTS_URL . 'waypoints.min.js', array( 'jquery' ), MP_STACKS_DOWNLOADGRID_VERSION );
 	
+	//Enqueue Isotope JS
+	wp_enqueue_script( 'isotope_js', MP_CORE_JS_SCRIPTS_URL . 'isotope.pkgd.min.js', array( 'jquery' ), MP_STACKS_DOWNLOADGRID_VERSION );
+	
 	//masonry script
 	wp_enqueue_script( 'masonry' );
+	
+	//Enqueue MP Stacks Grid JS
+	wp_enqueue_script( 'mp_stacks_grid_js', MP_STACKS_PLUGIN_URL . 'includes/js/mp-stacks-grids.js', array( 'jquery', 'masonry', 'isotope_js', 'waypoints_js', 'velocity_js' ), MP_STACKS_VERSION );
 			
-	//Enqueue downloadgrid JS
-	wp_enqueue_script( 'mp_stacks_downloadgrid_js', plugins_url( 'js/downloadgrid.js', dirname( __FILE__ ) ), array( 'jquery', 'velocity_js', 'masonry', 'waypoints_js' ), MP_STACKS_DOWNLOADGRID_VERSION );
-
 }
  
 /**

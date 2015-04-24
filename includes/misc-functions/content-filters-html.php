@@ -251,49 +251,18 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	
 	//Get the JS for animating items - only needed the first time we run this - not on subsequent Ajax requests.
 	if ( !defined('DOING_AJAX') ){
-					
-		//Check if we should apply Masonry to this grid
-		$downloadgrid_masonry = mp_core_get_post_meta( $post_id, 'downloadgrid_masonry' );
 		
-		//If we should apply Masonry to this grid
-		if ( $downloadgrid_masonry ){
-			 
-			//Add Masonry JS 
-			$downloadgrid_output .= '<script type="text/javascript">
-				jQuery(document).ready(function($){ 
-					//Activate Masonry for Grid Items
-					$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).imagesLoaded(function(){
-						$( "#mp-brick-' . $post_id . ' .mp-stacks-grid" ).masonry();
-					});
-				});
-				var masonry_grid_' . $post_id . ' = true;
-				</script>';
-		}
-		else{
-			
-			//Set Masonry Variable to False so we know not to refresh masonry upon ajax
-			$downloadgrid_output .= '<script type="text/javascript">
-				var masonry_grid_' . $post_id . ' = false;
-			</script>';	
-		}
-		
-		//Filter Hook which can be used to apply javascript output for items in this grid
-		$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_animation_js', $downloadgrid_output, $post_id );
-		
-		//Get JS output to animate the images on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-image', mp_core_get_post_meta( $post_id, 'downloadgrid_image_animation_keyframes', array() ) ); 
-		
-		//Get JS output to animate the images overlays on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-image-overlay',mp_core_get_post_meta( $post_id, 'downloadgrid_image_overlay_animation_keyframes', array() ) ); 
-		
-		//Get JS output to animate the background on mouse over and out
-		$downloadgrid_output .= mp_core_js_mouse_over_animate_child( '#mp-brick-' . $post_id . ' .mp-stacks-grid-item', '.mp-stacks-grid-item-inner',mp_core_get_post_meta( $post_id, 'downloadgrid_bg_animation_keyframes', array() ) ); 
+		//Here we set javascript for this grid
+		$downloadgrid_output .= apply_filters( 'mp_stacks_grid_js', NULL, $post_id, 'downloadgrid' );
 		
 	}
 	
+	//Add HTML that sits before the "grid" div
+	$downloadgrid_output .= !defined('DOING_AJAX') ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'downloadgrid', $downloadgrid_taxonomy_terms ) : NULL; 
+	
 	//Get Download Output
-	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-grid">' : NULL;
-		
+	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'downloadgrid' ) . '">' : NULL;
+			
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
 	
@@ -307,10 +276,10 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 		while( $downloadgrid_query->have_posts() ) : $downloadgrid_query->the_post(); 
 		
 				$grid_post_id = get_the_ID();
-						
+										
 				//Reset Grid Classes String
-				$grid_item_classes = NULL;
-				$grid_item_inner_bg_color_style_tag = NULL;
+				$source_counter = 0;
+				$post_source_num = NULL;
 				$grid_item_inner_bg_color = NULL;
 				
 				//If there are multiple tax terms selected to show
@@ -321,26 +290,36 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 																		
 						//If the current post has this term, make that term one of the classes for the grid item
 						if ( has_term( $downloadgrid_taxonomy_term['taxonomy_term'], 'download_category', $grid_post_id ) ){
-								
-							$term_slug = get_term_by( 'id', $downloadgrid_taxonomy_term['taxonomy_term'] , 'download_category' );
-							$grid_item_classes .= ' ' . $term_slug->slug . ' ';
 							
+							//Store the source this post belongs to
+							$post_source_num = $source_counter;
+														
 							if ( !empty( $downloadgrid_taxonomy_term['taxonomy_bg_color'] ) ){
-								$grid_item_inner_bg_color_style_tag = '<style type="text/css" scoped>#mp-brick-' . $post_id . ' .mp-stacks-grid-item-' . $grid_post_id . ' .mp-stacks-grid-item-inner{ background-color:' . $downloadgrid_taxonomy_term['taxonomy_bg_color'] . ';</style>';
 								$grid_item_inner_bg_color = $downloadgrid_taxonomy_term['taxonomy_bg_color'];
 							}
 							
 						}
 						
+						$source_counter = $source_counter + 1;
+						
 					}
 				}
 				
-				$downloadgrid_output .= '<div class="mp-stacks-grid-item mp-stacks-grid-item-' . $grid_post_id . $grid_item_classes . '">';
+				//Add our custom classes to the grid-item 
+				$class_string = 'mp-stacks-grid-source-' . $post_source_num . ' mp-stacks-grid-item mp-stacks-grid-item-' . $grid_post_id . ' ';
+				//Add all posts that would be added from the post_class wp function as well
+				$class_string = join( ' ', get_post_class( $class_string, $grid_post_id ) );
+				$class_string = apply_filters( 'mp_stacks_grid_item_classes', $class_string, $post_id, 'downloadgrid' ); 
+				
+				//Get the Grid Item Attributes
+				$grid_item_attribute_string = apply_filters( 'mp_stacks_grid_attribute_string', NULL, $downloadgrid_taxonomy_terms, $grid_post_id, $post_id, 'downloadgrid', $post_source_num );
+				
+				$downloadgrid_output .= '<div class="' . $class_string . '" ' . $grid_item_attribute_string . '>';
 					$downloadgrid_output .= '<div class="mp-stacks-grid-item-inner" ' . (!empty( $grid_item_inner_bg_color ) ? 'mp-default-bg-color="' . $grid_item_inner_bg_color . '"' : NULL) . '>';
 					
-					//Css style tag which applies the user-chosen background color to this post.
-					$downloadgrid_output .= $grid_item_inner_bg_color_style_tag;
-					
+					//Add htmloutput directly inside this grid item
+					$downloadgrid_output .= apply_filters( 'mp_stacks_grid_inside_grid_item_top', NULL, $downloadgrid_taxonomy_terms, $post_id, 'downloadgrid', $grid_post_id, $post_source_num );
+										
 					//Microformats
 					$downloadgrid_output .= '
 					<article class="microformats hentry" style="display:none;">

@@ -60,7 +60,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	$css_output = '
 	#mp-brick-' . $post_id . ' .mp-stacks-grid-item{' . 
 			mp_core_css_line( 'color', $default_text_color ) . 
-			mp_core_css_line( 'width', (100/$downloadgrid_per_row), '%' ) . 
+			mp_core_css_line( 'width', round((100/$downloadgrid_per_row), 1), '%' ) . 
 			mp_core_css_line( 'padding', $downloadgrid_post_spacing, 'px' ) . 
 	'}
 	#mp-brick-' . $post_id . ' .mp-stacks-grid-item-inner{' . 
@@ -89,8 +89,14 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 		mp_core_css_line( 'padding', $downloadgrid_featured_images_inner_margin, 'px' ) . 
 	'}';
 	
+	//Get the css output the the isotope button navigation
+	$css_output .= mp_stacks_grid_isotope_nav_btns_css( $post_id, 'downloadgrid' );
+	
 	//Get the css output for the image overlay for mobile
 	$css_output .= mp_stacks_grid_overlay_mobile_css( $post_id, 'downloadgrid_image_overlay_animation_keyframes' );
+	
+	//Get the bg color for each post
+	$css_output .= mp_stacks_grid_bg_color_css( $post_id, mp_core_get_post_meta( $post_id, 'downloadgrid_taxonomy_terms', array() ), 'inner_bg_color' );
 	
 	return $css_output;
 	
