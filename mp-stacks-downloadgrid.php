@@ -198,6 +198,11 @@ function mp_stacks_downloadgrid_include_files(){
 		 * Include all "Load More" Functions
 		 */
 		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/load-more-setup.php' );
+		
+		/**
+		 * Isotope Setup
+		 */
+		require( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/misc-functions/isotope-setup.php' );
 				
 	}
 }
