@@ -51,7 +51,7 @@ function mp_stacks_downloadgrid_excerpt_meta_options( $items_array ){
 			'field_title' 	=> __( 'Excerpt Placement', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Where would you like to place the excerpt? Default: Below Image, Left', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'select',
-			'field_value' => '',
+			'field_value' => 'below_image_left',
 			'field_select_values' => mp_stacks_get_text_position_options(),
 			'field_showhider' => 'downloadgrid_excerpt_settings',
 		),
