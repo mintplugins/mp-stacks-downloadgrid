@@ -82,6 +82,19 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
+		'downloadgrid_order_by' => array(
+			'field_id'			=> 'downloadgrid_order_by',
+			'field_title' 	=> __( 'Order By', 'mp_stacks_downloadgrid'),
+			'field_description' 	=> __( 'How should these items be ordered by default?', 'mp_stacks_downloadgrid' ),
+			'field_type' 	=> 'select',
+			'field_select_values' => array( 
+				'date' => __( 'Date Posted', 'mp_stacks_downloadgrid' ),
+				'sales' => __( 'Most Sales', 'mp_stacks_downloadgrid' ),
+				'comments' => __( 'Most Comments', 'mp_stacks_downloadgrid' ),
+			),
+			'field_value' => 'date',
+			'field_showhider' => 'downloadgrid_layout_settings',
+		),
 		'downloadgrid_posts_per_row' => array(
 			'field_id'			=> 'downloadgrid_per_row',
 			'field_title' 	=> __( 'Downloads Per Row', 'mp_stacks_downloadgrid'),
@@ -205,15 +218,6 @@ function mp_stacks_downloadgrid_create_meta_box(){
 				'field_showhider' => 'downloadgrid_bg_settings',
 			),
 		
-		'downloadgrid_masonry' => array(
-			'field_id'			=> 'downloadgrid_masonry',
-			'field_title' 	=> __( 'Use Masonry?', 'mp_stacks_downloadgrid'),
-			'field_description' 	=> __( 'Would you like to use Masonry for the layout? Masonry is similar to how Pinterest posts are laid out.', 'mp_stacks_downloadgrid' ),
-			'field_type' 	=> 'checkbox',
-			'field_value' => 'downloadgrid_masonry',
-			'field_showhider' => 'downloadgrid_layout_settings',
-		),
-		
 		//Use this to add new options at this point with the filter hook
 		'downloadgrid_meta_hook_anchor_1' => array( 'field_type' => 'hook_anchor'),
 		
@@ -229,7 +233,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_title' 	=> __( 'Show Featured Images?', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'Do you want to show the featured images for these posts?', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'checkbox',
-			'field_value' => 'downloadgrid_show_featured_images',
+			'field_value' => 'downloadgrid_featured_images_show',
 			'field_showhider' => 'downloadgrid_featured_images_settings',
 		),
 		'downloadgrid_feat_img_note' => array(

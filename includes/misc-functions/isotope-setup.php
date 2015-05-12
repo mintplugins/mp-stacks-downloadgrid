@@ -116,3 +116,25 @@ function mp_stacks_downloadgrid_all_icon( $isotope_icon, $meta_prefix ){
 	return 'fa-th-large';
 }
 add_filter( 'mp_stacks_grid_isotope_all_icon_font_class', 'mp_stacks_downloadgrid_all_icon', 10, 2);
+
+/**
+ * Add the orderby options for "Sort by Price, Most Sales, Newest" to the DownloadGrid Metabox
+ *
+ * @access   public
+ * @since    1.0.0
+ * @param    Void
+ * @param    $orderby_options Array - Any existing orderby options
+ * @param    $meta_prefix string - the meta prefix for this grid add-on
+ * @return   $orderby_options Array - The newly added orderby options for this grid addon
+*/
+function mp_stacks_downloadgrid_orderby_options( $orderby_options, $meta_prefix ){
+	$orderby_options['most_popular'] = __( 'Most Popular', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['price_highest_to_lowest'] = __( 'Highest Price', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['price_lowest_to_highest'] = __( 'Lowest Price', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['date_newest_to_oldest'] = __( 'Newest', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['date_oldest_to_newest'] = __( 'Oldest', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['random'] = __( 'Random', 'mp_stacks_' . $meta_prefix );
+	
+	return $orderby_options;
+}
+add_filter( 'downloadgrid' . '_isotope_orderby_options', 'mp_stacks_downloadgrid_orderby_options', 10, 2 );

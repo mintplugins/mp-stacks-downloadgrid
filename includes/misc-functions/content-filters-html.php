@@ -127,6 +127,40 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 		)
 	);
 	
+	$orderby = mp_stacks_grid_order_by( $post_id, 'downloadgrid' );
+	
+	//Set the order by options for the wp query
+	switch ( $orderby ) {
+		case 'popular':
+			$downloadgrid_args['orderby'] = 'meta_value_num date';
+			$downloadgrid_args['meta_key'] = '_edd_download_sales';
+			break;
+		case 'date_newest_to_oldest':
+			$downloadgrid_args['orderby'] = 'date';
+			$downloadgrid_args['order'] = 'DESC';
+			break;
+		case 'date_oldest_to_newest':
+			$downloadgrid_args['orderby'] = 'date';
+			$downloadgrid_args['order'] = 'ASC';
+			break;
+		case 'price_highest_to_lowest':
+			$downloadgrid_args['orderby'] = 'meta_value_num date';
+			$downloadgrid_args['meta_key'] = 'edd_price';
+			$downloadgrid_args['order'] = 'DESC';
+			break;
+		case 'price_lowest_to_highest':
+			$downloadgrid_args['orderby'] = 'meta_value_num date';
+			$downloadgrid_args['meta_key'] = 'edd_price';
+			$downloadgrid_args['order'] = 'ASC';
+			break;
+		case 'most_comments':
+			$downloadgrid_args['orderby'] = 'comment_count';
+			break;
+		case 'random':
+			$downloadgrid_args['orderby'] = 'rand';
+			break;
+	}
+	
 	//If we are using Offset
 	if ( !empty( $post_offset ) ){
 		//Add offset args to the WP_Query
@@ -240,7 +274,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	}
 	
 	//Show Download Images?
-	$downloadgrid_featured_images_show = mp_core_get_post_meta($post_id, 'downloadgrid_featured_images_show');
+	$downloadgrid_featured_images_show = mp_core_get_post_meta_checkbox($post_id, 'downloadgrid_featured_images_show', true);
 	
 	//Download Image width and height
 	$downloadgrid_featured_images_width = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_width', '500' );
