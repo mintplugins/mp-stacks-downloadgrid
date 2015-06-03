@@ -12,7 +12,7 @@
  * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2014, Mint Plugins
+ * @copyright  Copyright (c) 2015, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -275,7 +275,7 @@ function mp_stacks_downloadgrid_excerpt( $post_id, $word_limit, $read_more_text 
 	
 	$downloadgrid_output = mp_stacks_grid_highlight_text_html( array( 
 		'class_name' => 'mp-stacks-downloadgrid-item-excerpt',
-		'output_string' => $output_string, 
+		'output_string' => apply_filters( 'mp_stacks_downloadgrid_item_excerpt', $output_string, $post_id ), 
 	) );
 	
 	return $downloadgrid_output;	
