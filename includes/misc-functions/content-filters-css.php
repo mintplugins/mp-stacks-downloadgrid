@@ -57,7 +57,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	
 	//Get CSS Output
 	
-	$css_output = '
+	$css_output .= '
 	#mp-brick-' . $post_id . ' .mp-stacks-grid-item{' . 
 			mp_core_css_line( 'color', $default_text_color ) . 
 			mp_core_css_line( 'width', round((100/$downloadgrid_per_row), 1), '%' ) . 
