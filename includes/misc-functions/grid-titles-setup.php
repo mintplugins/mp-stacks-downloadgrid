@@ -12,7 +12,7 @@
  * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2014, Mint Plugins
+ * @copyright  Copyright (c) 2015, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -230,7 +230,7 @@ function mp_stacks_downloadgrid_title( $post_id ){
 	
 	$title_html_output = mp_stacks_grid_highlight_text_html( array( 
 		'class_name' => 'mp-stacks-downloadgrid-item-title',
-		'output_string' => get_the_title( $post_id ), 
+		'output_string' => apply_filters( 'mp_stacks_downloadgrid_item_title', get_the_title( $post_id ), $post_id )
 	) );
 	
 	return $title_html_output;
