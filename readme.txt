@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 4.1
-Stable tag: 1.0.1.1
+Stable tag: 1.0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,13 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.2 = June 3, 2015
+* Made Grid CSS Add-To Existing BRICK CSS
+* Added "mp_stacks_downloadgrid_item_price" Filter to allow filtering of Prices based on Grid Post.
+* Added "mp_stacks_downloadgrid_item_excerpt" Filter to allow filtering of Excerpts based on Grid Post.
+* Added "mp_stacks_downloadgrid_item_title" Filter to allow filtering of Title based on Grid Post.
+
 
 = 1.0.1.1 = May 12, 2015
 * Set proper default for exceprt placement
