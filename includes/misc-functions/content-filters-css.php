@@ -7,7 +7,7 @@
  * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2014, Mint Plugins
+ * @copyright  Copyright (c) 2015, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -28,6 +28,9 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	if ( $first_content_type != 'downloadgrid' && $second_content_type != 'downloadgrid' ){
 		return $css_output;	
 	}
+	
+	//Enqueue all css stylesheets used by grids.
+	mp_stacks_grids_enqueue_frontend_css( 'downloadgrid' );
 	
 	//Download per row
 	$downloadgrid_per_row = mp_core_get_post_meta($post_id, 'downloadgrid_per_row', '3');
@@ -93,7 +96,7 @@ function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id,
 	$css_output .= mp_stacks_grid_isotope_nav_btns_css( $post_id, 'downloadgrid' );
 	
 	//Get the css output for the image overlay for mobile
-	$css_output .= mp_stacks_grid_overlay_mobile_css( $post_id, 'downloadgrid_image_overlay_animation_keyframes' );
+	$css_output .= mp_stacks_grid_overlay_mobile_css( $post_id, 'downloadgrid_image_overlay_animation_keyframes', 'downloadgrid' );
 	
 	//Get the bg color for each post
 	$css_output .= mp_stacks_grid_bg_color_css( $post_id, mp_core_get_post_meta( $post_id, 'downloadgrid_taxonomy_terms', array() ), 'inner_bg_color' );
