@@ -54,7 +54,7 @@ function mp_downloadgrid_ajax_load_more(){
 	$post_offset = $_POST['mp_stacks_grid_offset'];
 
 	//Because we run the same function for this and for "Load More" ajax, we call a re-usable function which returns the output
-	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id, $post_offset );
+	$downloadgrid_output = mp_stacks_downloadgrid_output( $post_id, true, $post_offset );
 	
 	echo json_encode( array(
 		'items' => $downloadgrid_output['downloadgrid_output'],
@@ -75,26 +75,24 @@ add_action( 'wp_ajax_nopriv_mp_stacks_downloadgrid_load_more', 'mp_downloadgrid_
  * @since    1.0.0
  * @param    Void
  * @param    $post_id Int - The ID of the Brick
+ * @param    $loading_more string - If we are loading more through ajax, this will be true, Defaults to false.
  * @param    $post_offset Int - The number of posts deep we are into the loop (if doing ajax). If not doing ajax, set this to 0;
  * @return   Array - HTML output from the Grid Loop, The Load More Button, and the Animation Trigger in an array for usage in either ajax or not.
  */
-function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
+function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_offset = NULL ){
 	
 	global $wp_query;
 	
-	//Start up the PHP session if there isn't one already
-	if( !session_id() ){
-		session_start();
-	}
+	//Enqueue all js scripts used by grids.
+	mp_stacks_grids_enqueue_frontend_scripts( 'downloadgrid' );
 	
 	//If we are NOT doing ajax get the parent's post id from the wp_query.
 	if ( !defined( 'DOING_AJAX' ) ){
 		$queried_object_id = $wp_query->queried_object_id;
-		$_SESSION['mp_stacks_downloadgrid_queryobjid_' . $post_id] = $queried_object_id;
 	}
-	//If we are doing ajax, get the parent's post id from the PHP session where it was stored on initial the page load.
+	//If we are doing ajax, get the parent's post id from the AJAX-passed $_POST['mp_stacks_queried_object_id']
 	else{
-		$queried_object_id = $_SESSION['mp_stacks_downloadgrid_queryobjid_' . $post_id];
+		$queried_object_id = isset( $_POST['mp_stacks_queried_object_id'] ) ? $_POST['mp_stacks_queried_object_id'] : NULL;
 	}
 	
 	//Get this Brick Info
@@ -195,41 +193,45 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	//If there are tax terms selected to show (the "new" way with multiple terms)
 	if ( is_array( $downloadgrid_taxonomy_terms ) && !empty( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] ) ){
 		
-		//Loop through each term the user added to this downloadgrid
-		foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
+		//If the selection for category is "all", we don't need to add anything extra to the qeury
+		if ( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] != 'all' ){
 		
-			//If we should show related downloads
-			if ( $downloadgrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
-				
-				$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
-				
-				if ( is_object( $tags ) ){
-					$tags_array = $tags;
+			//Loop through each term the user added to this downloadgrid
+			foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
+			
+				//If we should show related downloads
+				if ( $downloadgrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
+					
+					$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+					
+					if ( is_object( $tags ) ){
+						$tags_array = $tags;
+					}
+					elseif (is_array( $tags ) ){
+						$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+					}
+					
+					$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
+					
+					//Add the related tags as a tax_query to the WP_Query
+					$downloadgrid_args['tax_query'][] = array(
+						'taxonomy' => 'download_tag',
+						'field'    => 'slug',
+						'terms'    => $tag_slugs,
+					);
+								
 				}
-				elseif (is_array( $tags ) ){
-					$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+				//If we should show a download category of the users choosing
+				else{
+					
+					//Add the category we want to show to the WP_Query
+					$downloadgrid_args['tax_query'][] = array(
+						'taxonomy' => 'download_category',
+						'field'    => 'id',
+						'terms'    => $downloadgrid_taxonomy_term['taxonomy_term'],
+						'operator' => 'IN'
+					);		
 				}
-				
-				$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
-				
-				//Add the related tags as a tax_query to the WP_Query
-				$downloadgrid_args['tax_query'][] = array(
-					'taxonomy' => 'download_tag',
-					'field'    => 'slug',
-					'terms'    => $tag_slugs,
-				);
-							
-			}
-			//If we should show a download category of the users choosing
-			else{
-				
-				//Add the category we want to show to the WP_Query
-				$downloadgrid_args['tax_query'][] = array(
-					'taxonomy' => 'download_category',
-					'field'    => 'id',
-					'terms'    => $downloadgrid_taxonomy_term['taxonomy_term'],
-					'operator' => 'IN'
-				);		
 			}
 		}
 	}
@@ -278,13 +280,13 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	
 	//Download Image width and height
 	$downloadgrid_featured_images_width = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_width', '500' );
-	$downloadgrid_featured_images_height = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_height', '0' );
+	$downloadgrid_featured_images_height = mp_core_get_post_meta( $post_id, 'downloadgrid_featured_images_height', 0 );
 	
 	//Get the options for the grid placement - we pass this to the action filters for text placement
 	$grid_placement_options = apply_filters( 'mp_stacks_downloadgrid_placement_options', NULL, $post_id );
 	
 	//Get the JS for animating items - only needed the first time we run this - not on subsequent Ajax requests.
-	if ( !defined('DOING_AJAX') ){
+	if ( !$loading_more ){
 		
 		//Here we set javascript for this grid
 		$downloadgrid_output .= apply_filters( 'mp_stacks_grid_js', NULL, $post_id, 'downloadgrid' );
@@ -292,10 +294,10 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	}
 	
 	//Add HTML that sits before the "grid" div
-	$downloadgrid_output .= !defined('DOING_AJAX') ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'downloadgrid', $downloadgrid_taxonomy_terms ) : NULL; 
+	$downloadgrid_output .= !$loading_more ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'downloadgrid', $downloadgrid_taxonomy_terms ) : NULL; 
 	
 	//Get Download Output
-	$downloadgrid_output .= !defined('DOING_AJAX') ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'downloadgrid' ) . '">' : NULL;
+	$downloadgrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'downloadgrid' ) . '">' : NULL;
 			
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
@@ -368,10 +370,10 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 					if ($downloadgrid_featured_images_show){
 						
 						$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-holder">';
-						
-							$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
-							
+												
 							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
+							
+							$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
 							//Get the featured image and crop according to the user's specs
 							if ( $downloadgrid_featured_images_height > 0 && !empty( $downloadgrid_featured_images_height ) ){
@@ -454,7 +456,7 @@ function mp_stacks_downloadgrid_output( $post_id, $post_offset = NULL ){
 	}
 	
 	//If we're not doing ajax, add the stuff to close the downloadgrid container and items needed after
-	if ( !defined('DOING_AJAX') ){
+	if ( !$loading_more ){
 		$downloadgrid_output .= '</div>';
 	}
 	
