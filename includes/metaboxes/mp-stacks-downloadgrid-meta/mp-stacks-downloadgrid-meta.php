@@ -32,16 +32,30 @@ function mp_stacks_downloadgrid_create_meta_box(){
 		'metabox_title' => __( '"DownloadGrid" Content-Type', 'mp_stacks_downloadgrid'), 
 		'metabox_posttype' => 'mp_brick', 
 		'metabox_context' => 'advanced', 
-		'metabox_priority' => 'low' 
+		'metabox_priority' => 'low' ,
+		'metabox_content_via_ajax' => true,
 	);
+	
+	//Add "All" as the first option for sources for this grid
+	$download_categories['all'] = __( 'All Downloads', 'mp_stacks_downloadgrid' );
+		
+	$get_download_categories = mp_core_get_all_terms_by_tax('download_category'); 
+	
+	//Loop through each category
+	foreach( $get_download_categories as $term_id => $term_name ){
+		//Add the event category to the list of source options for this grid
+		$download_categories[$term_id] = $term_name;
+	}
+		
+	$download_categories['related_downloads'] = __('Show Related Downloads based on Tag (only use this if the stack is sitting on a "Download" page).');
+	
+	//Create the correct "Manage Downloads" link to match the EDD plugin.
+	$manage_downloads_link = admin_url( 'edit.php?post_type=download' );
 	
 	/**
 	 * Array which stores all info about the options within the metabox
 	 *
-	 */
-	$download_categories = mp_core_get_all_terms_by_tax('download_category'); 
-	$download_categories['related_downloads'] = __('Show Related Downloads based on Tag (only use this if the stack is sitting on a "Download" page).');
-	 
+	 */	 
 	$mp_stacks_downloadgrid_items_array = array(
 	
 		//Use this to add new options at this point with the filter hook
@@ -57,7 +71,7 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'downloadgrid_taxonomy_terms' => array(
 				'field_id'			=> 'taxonomy_term',
 				'field_title' 	=> __( 'Select a Category or Tag you want to show', 'mp_stacks_downloadgrid'),
-				'field_description' 	=> __( 'What posts should be shown in the Download Grid?', 'mp_stacks_downloadgrid' ),
+				'field_description' 	=> __( 'What posts should be shown in the Download Grid?', 'mp_stacks_downloadgrid' ) . ' (<a href="' . $manage_downloads_link . '" target="_blank">' . __( 'Manage Downloads', 'mp_stacks_downloadgrid' ) . '</a>)',
 				'field_type' 	=> 'select',
 				'field_value' => '',
 				'field_select_values' => $download_categories,
@@ -428,4 +442,5 @@ function mp_stacks_downloadgrid_create_meta_box(){
 	global $mp_stacks_downloadgrid_meta_box;
 	$mp_stacks_downloadgrid_meta_box = new MP_CORE_Metabox($mp_stacks_downloadgrid_add_meta_box, $mp_stacks_downloadgrid_items_array);
 }
-add_action('mp_brick_metabox', 'mp_stacks_downloadgrid_create_meta_box');
+add_action('mp_brick_ajax_metabox', 'mp_stacks_downloadgrid_create_meta_box');
+add_action('wp_ajax_mp_stacks_downloadgrid_metabox_content', 'mp_stacks_downloadgrid_create_meta_box');
