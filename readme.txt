@@ -3,8 +3,8 @@ Contributors: johnstonphilip
 Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
-Tested up to: 4.1
-Stable tag: 1.0.1.2
+Tested up to: 4.3
+Stable tag: 1.0.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,15 +33,22 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 == Changelog ==
 
+= 1.0.1.3 = September 19, 2015
+* Added the ability to display "All Downloads" instead of a specific category if needed.
+* Added link to "Manage Downloads" from the Brick Editor controls. Opens in new tab.
+* Brick Metabox controls now load using ajax.
+* Admin Meta Scripts now enqueued only when needed.
+* Removed PHP $_SESSION for queried_object_id. It now uses a $_POST['mp_stacks_queried_object_id'] var if doing ajax and the global $wp_query->queried_object_id if not doing ajax.
+* Make DownloadGrid centred by default for Brick Alignment.
+
 = 1.0.1.2 = June 3, 2015
 * Made Grid CSS Add-To Existing BRICK CSS
 * Added "mp_stacks_downloadgrid_item_price" Filter to allow filtering of Prices based on Grid Post.
 * Added "mp_stacks_downloadgrid_item_excerpt" Filter to allow filtering of Excerpts based on Grid Post.
 * Added "mp_stacks_downloadgrid_item_title" Filter to allow filtering of Title based on Grid Post.
 
-
 = 1.0.1.1 = May 12, 2015
-* Set proper default for exceprt placement
+* Set proper default for excerpt placement
 * Added orderby options
 
 = 1.0.1.0 = April 24, 2015
