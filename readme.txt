@@ -4,7 +4,7 @@ Donate link: http://mintplugins.com/
 Tags: message bar, header
 Requires at least: 3.5
 Tested up to: 4.3
-Stable tag: 1.0.1.4
+Stable tag: 1.0.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -32,6 +32,9 @@ See full instructions at http://mintplugins.com/doc/mp-stacks
 
 
 == Changelog ==
+
+= 1.0.1.5 = November 4, 2015
+* Added Isotope "Load From Scratch" option.
 
 = 1.0.1.4 = September 24, 2015
 * Changed grid downloads_per_row to use the "mp_stacks_grid_posts_per_row_percentage" function in MP Stacks.
