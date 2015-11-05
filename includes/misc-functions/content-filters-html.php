@@ -189,90 +189,113 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 		}
 		
 	}
+	
+	//Check the load more behavior to make sure it ins't pagination
+	$load_more_behaviour = mp_core_get_post_meta($post_id, 'downloadgrid' . '_load_more_behaviour', 'ajax_load_more' );
+	
+	//If we are loading from scratch based on a user's selection AND we are not using pagination as the "Load More" style (which won't work with this type of filtering)
+	if ( isset( $_POST['mp_stacks_grid_filter_tax'] ) && !empty( $_POST['mp_stacks_grid_filter_tax'] ) && isset( $_POST['mp_stacks_grid_filter_term'] ) && !empty( $_POST['mp_stacks_grid_filter_term'] ) && $load_more_behaviour != 'pagination' ){
 		
-	//If there are tax terms selected to show (the "new" way with multiple terms)
-	if ( is_array( $downloadgrid_taxonomy_terms ) && !empty( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] ) ){
+		$user_chosen_tax = $_POST['mp_stacks_grid_filter_tax'];
+		$user_chosen_term = $_POST['mp_stacks_grid_filter_term'];
 		
-		//If the selection for category is "all", we don't need to add anything extra to the qeury
-		if ( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] != 'all' ){
+		if ( !empty( $user_chosen_tax ) && !empty( $user_chosen_term ) ){
 		
-			//Loop through each term the user added to this downloadgrid
-			foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
-			
-				//If we should show related downloads
-				if ( $downloadgrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
-					
-					$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
-					
-					if ( is_object( $tags ) ){
-						$tags_array = $tags;
-					}
-					elseif (is_array( $tags ) ){
-						$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
-					}
-					
-					$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
-					
-					//Add the related tags as a tax_query to the WP_Query
-					$downloadgrid_args['tax_query'][] = array(
-						'taxonomy' => 'download_tag',
-						'field'    => 'slug',
-						'terms'    => $tag_slugs,
-					);
-								
-				}
-				//If we should show a download category of the users choosing
-				else{
-					
-					//Add the category we want to show to the WP_Query
-					$downloadgrid_args['tax_query'][] = array(
-						'taxonomy' => 'download_category',
-						'field'    => 'id',
-						'terms'    => $downloadgrid_taxonomy_term['taxonomy_term'],
-						'operator' => 'IN'
-					);		
-				}
-			}
-		}
-	}
-	//if there is a single tax term to show (this is backward compatibility for before the terms selector was repeatable.
-	else if( !empty( $downloadgrid_taxonomy_term ) ){
-		//If we should show related downloads
-		if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
-			
-			$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
-			
-			if ( is_object( $tags ) ){
-				$tags_array = $tags;
-			}
-			elseif (is_array( $tags ) ){
-				$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
-			}
-			
-			$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
-			
-			//Add the related tags as a tax_query to the WP_Query
+			//Add the user chosen tax and term as a tax_query to the WP_Query
 			$downloadgrid_args['tax_query'][] = array(
-				'taxonomy' => 'download_tag',
+				'taxonomy' => $user_chosen_tax,
 				'field'    => 'slug',
-				'terms'    => $tag_slugs,
+				'terms'    => $user_chosen_term,
 			);
-						
+		
 		}
-		//If we should show a download category of the users choosing
-		else{
+					
+	}	
+	else{	
+		//If there are tax terms selected to show (the "new" way with multiple terms)
+		if ( is_array( $downloadgrid_taxonomy_terms ) && !empty( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] ) ){
 			
-			//Add the category we want to show to the WP_Query
-			$downloadgrid_args['tax_query'][] = array(
-				'taxonomy' => 'download_category',
-				'field'    => 'id',
-				'terms'    => $downloadgrid_taxonomy_term,
-				'operator' => 'IN'
-			);		
+			//If the selection for category is "all", we don't need to add anything extra to the qeury
+			if ( $downloadgrid_taxonomy_terms[0]['taxonomy_term'] != 'all' ){
+			
+				//Loop through each term the user added to this downloadgrid
+				foreach( $downloadgrid_taxonomy_terms as $downloadgrid_taxonomy_term ){
+				
+					//If we should show related downloads
+					if ( $downloadgrid_taxonomy_term['taxonomy_term'] == 'related_downloads' ){
+						
+						$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+						
+						if ( is_object( $tags ) ){
+							$tags_array = $tags;
+						}
+						elseif (is_array( $tags ) ){
+							$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+						}
+						
+						$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
+						
+						//Add the related tags as a tax_query to the WP_Query
+						$downloadgrid_args['tax_query'][] = array(
+							'taxonomy' => 'download_tag',
+							'field'    => 'slug',
+							'terms'    => $tag_slugs,
+						);
+									
+					}
+					//If we should show a download category of the users choosing
+					else{
+						
+						//Add the category we want to show to the WP_Query
+						$downloadgrid_args['tax_query'][] = array(
+							'taxonomy' => 'download_category',
+							'field'    => 'id',
+							'terms'    => $downloadgrid_taxonomy_term['taxonomy_term'],
+							'operator' => 'IN'
+						);		
+					}
+				}
+			}
 		}
-	}
-	else{
-		return false;	
+		//if there is a single tax term to show (this is backward compatibility for before the terms selector was repeatable.
+		else if( !empty( $downloadgrid_taxonomy_term ) ){
+			//If we should show related downloads
+			if ( $downloadgrid_taxonomy_term == 'related_downloads' ){
+				
+				$tags = wp_get_post_terms( $queried_object_id, 'download_tag' );
+				
+				if ( is_object( $tags ) ){
+					$tags_array = $tags;
+				}
+				elseif (is_array( $tags ) ){
+					$tags_array = isset( $tags[0] ) ? $tags[0] : NULL;
+				}
+				
+				$tag_slugs = wp_get_post_terms( $queried_object_id, 'download_tag', array("fields" => "slugs") );
+				
+				//Add the related tags as a tax_query to the WP_Query
+				$downloadgrid_args['tax_query'][] = array(
+					'taxonomy' => 'download_tag',
+					'field'    => 'slug',
+					'terms'    => $tag_slugs,
+				);
+							
+			}
+			//If we should show a download category of the users choosing
+			else{
+				
+				//Add the category we want to show to the WP_Query
+				$downloadgrid_args['tax_query'][] = array(
+					'taxonomy' => 'download_category',
+					'field'    => 'id',
+					'terms'    => $downloadgrid_taxonomy_term,
+					'operator' => 'IN'
+				);		
+			}
+		}
+		else{
+			return false;	
+		}
 	}
 	
 	//Show Download Images?
@@ -297,7 +320,7 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 	$downloadgrid_output .= !$loading_more ? apply_filters( 'mp_stacks_grid_before', NULL, $post_id, 'downloadgrid', $downloadgrid_taxonomy_terms ) : NULL; 
 	
 	//Get Download Output
-	$downloadgrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'downloadgrid' ) . '">' : NULL;
+	$downloadgrid_output .= !$loading_more ? '<div class="mp-stacks-grid ' . apply_filters( 'mp_stacks_grid_classes', NULL, $post_id, 'downloadgrid' ) . '" ' . apply_filters( 'mp_stacks_grid_attributes', NULL, $post_id, 'downloadgrid' ) . '>' : NULL;
 			
 	//Create new query for stacks
 	$downloadgrid_query = new WP_Query( apply_filters( 'downloadgrid_args', $downloadgrid_args ) );
