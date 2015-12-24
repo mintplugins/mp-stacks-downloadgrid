@@ -3,7 +3,7 @@
 Plugin Name: MP Stacks + DownloadGrid
 Plugin URI: http://mintplugins.com
 Description: Displays posts from Easy Digital Downloads categories in a grid in a Brick
-Version: 1.0.1.5
+Version: 1.0.1.6
 Author: Mint Plugins
 Author URI: http://mintplugins.com
 Text Domain: mp_stacks_downloadgrid
@@ -34,7 +34,7 @@ License: GPL2
 */
 // Plugin version
 if( !defined( 'MP_STACKS_DOWNLOADGRID_VERSION' ) )
-	define( 'MP_STACKS_DOWNLOADGRID_VERSION', '1.0.1.5' );
+	define( 'MP_STACKS_DOWNLOADGRID_VERSION', '1.0.1.6' );
 
 // Plugin Folder URL
 if( !defined( 'MP_STACKS_DOWNLOADGRID_PLUGIN_URL' ) )
