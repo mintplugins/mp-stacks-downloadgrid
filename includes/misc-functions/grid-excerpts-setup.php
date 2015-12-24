@@ -356,12 +356,12 @@ add_filter( 'mp_stacks_downloadgrid_bottom_over', 'mp_stacks_downloadgrid_excerp
  * @param    $grid_post_id Int - The ID of the post
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
-function mp_stacks_downloadgrid_excerpt_below_over_callback( $downloadgrid_output, $grid_post_id, $options ){
+function mp_stacks_downloadgrid_excerpt_below_over_callback( $downloadgrid_output, $grid_post_id, $post_id, $options ){
 	
 	//If we should show the excerpt below the image
 	if ( strpos( $options['excerpt_placement'], 'below') !== false && $options['excerpt_show']){
 		
-		$excerpt_html_output = '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-excerpt-link">';	
+		$excerpt_html_output = '<a href="' . apply_filters( 'mp_stacks_downloadgrid_grid_post_permalink', get_permalink(), $grid_post_id, $post_id ) . '" class="mp-stacks-downloadgrid-excerpt-link">';	
 			$excerpt_html_output .= mp_stacks_downloadgrid_excerpt( $grid_post_id, $options['word_limit'], $options['read_more_text'] );
 		$excerpt_html_output .= '</a>';
 		
@@ -371,7 +371,7 @@ function mp_stacks_downloadgrid_excerpt_below_over_callback( $downloadgrid_outpu
 	return $downloadgrid_output;
 	
 }
-add_filter( 'mp_stacks_downloadgrid_below', 'mp_stacks_downloadgrid_excerpt_below_over_callback', 10, 3 );
+add_filter( 'mp_stacks_downloadgrid_below', 'mp_stacks_downloadgrid_excerpt_below_over_callback', 10, 4 );
 
 /**
  * Add the JS for the excerpt to DownloadGrid's HTML output

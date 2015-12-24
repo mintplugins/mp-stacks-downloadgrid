@@ -394,7 +394,7 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 						
 						$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-holder">';
 												
-							$downloadgrid_output .= '<a href="' . get_permalink() . '" class="mp-stacks-grid-image-link" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
+							$downloadgrid_output .= '<a href="' . apply_filters( 'mp_stacks_downloadgrid_grid_post_permalink', get_permalink(), $grid_post_id, $post_id ) . '" class="mp-stacks-grid-image-link" title="' . the_title_attribute( 'echo=0' ) . '" alt="' . the_title_attribute( 'echo=0' ) . '">';
 							
 							$downloadgrid_output .= '<div class="mp-stacks-grid-item-image-overlay"></div>';
 							
@@ -466,7 +466,7 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 					$downloadgrid_output .= '<div class="mp-stacks-grid-item-below-image-holder">';
 					
 						//Filter Hook to output HTML into the "Below" position on the featured Image
-						$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_below', NULL, $grid_post_id, $grid_placement_options );
+						$downloadgrid_output .= apply_filters( 'mp_stacks_downloadgrid_below', NULL, $grid_post_id, $post_id, $grid_placement_options );
 				
 					$downloadgrid_output .= '</div>';
 				

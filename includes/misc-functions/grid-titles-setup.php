@@ -310,12 +310,12 @@ add_filter( 'mp_stacks_downloadgrid_bottom_over', 'mp_stacks_downloadgrid_title_
  * @param    $grid_post_id Int - The ID of the post
  * @return   $html_output String - A string holding the html for text over a featured image in the grid
  */
-function mp_stacks_downloadgrid_title_below_over_callback( $downloadgrid_output, $grid_post_id, $options ){
+function mp_stacks_downloadgrid_title_below_over_callback( $downloadgrid_output, $grid_post_id, $brick_id, $options ){
 	
 	//If we should show the title below the image
 	if ( strpos( $options['title_placement'], 'below') !== false && $options['title_show']){
 		
-		$title_html_output = '<a href="' . get_permalink() . '" class="mp-stacks-downloadgrid-title-link">';	
+		$title_html_output = '<a href="' . apply_filters( 'mp_stacks_downloadgrid_grid_post_permalink', get_permalink(), $grid_post_id, $brick_id ) . '" class="mp-stacks-downloadgrid-title-link">';	
 			$title_html_output .= mp_stacks_downloadgrid_title( $grid_post_id );
 		$title_html_output .= '</a>';
 		
@@ -325,7 +325,7 @@ function mp_stacks_downloadgrid_title_below_over_callback( $downloadgrid_output,
 	return $downloadgrid_output;
 	
 }
-add_filter( 'mp_stacks_downloadgrid_below', 'mp_stacks_downloadgrid_title_below_over_callback', 10, 3 );
+add_filter( 'mp_stacks_downloadgrid_below', 'mp_stacks_downloadgrid_title_below_over_callback', 10, 4 );
 
 /**
  * Add the JS for the title to DownloadGrid's HTML output
