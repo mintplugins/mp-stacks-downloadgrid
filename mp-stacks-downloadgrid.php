@@ -105,7 +105,7 @@ function mp_stacks_downloadgrid_include_files(){
 	/**
 	 * If mp_core or mp_stacks aren't active, stop and install it now
 	 */
-	if (!function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain')){
+	if (!function_exists('mp_core_textdomain') || !function_exists('mp_stacks_textdomain') || !function_exists( 'EDD' ) ){
 		
 		/**
 		 * Include Plugin Checker
@@ -125,7 +125,12 @@ function mp_stacks_downloadgrid_include_files(){
 		/**
 		 * Check if mp_stacks is installed
 		 */
-		include_once( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/mp-stacks.php' );
+		include_once( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/mp-stacks-check.php' );
+		
+		/**
+		 * Check if Easy Digital Downloads is installed
+		 */
+		include_once( MP_STACKS_DOWNLOADGRID_PLUGIN_DIR . 'includes/plugin-checker/included-plugins/easy-digital-downloads-check.php' );
 		
 	}
 	/**
