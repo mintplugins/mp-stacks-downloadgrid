@@ -7,7 +7,7 @@
  * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2015, Mint Plugins
+ * @copyright  Copyright (c) 2016, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -21,7 +21,7 @@
  * @param    $post_id             Int - The post ID of the brick
  * @param    $first_content_type  String - The first content type chosen for this brick
  * @param    $second_content_type String - The second content type chosen for this brick
- * @return   $html_output         String - A string holding the css the brick
+ * @return   $css_output         String - A string holding the css the brick
  */
 function mp_stacks_brick_content_output_css_downloadgrid( $css_output, $post_id, $first_content_type, $second_content_type ){
 	
