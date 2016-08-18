@@ -128,11 +128,11 @@ add_filter( 'mp_stacks_grid_isotope_all_icon_font_class', 'mp_stacks_downloadgri
  * @return   $orderby_options Array - The newly added orderby options for this grid addon
 */
 function mp_stacks_downloadgrid_orderby_options( $orderby_options, $meta_prefix ){
+	$orderby_options['date_newest_to_oldest'] = __( 'Newest', 'mp_stacks_' . $meta_prefix );
+	$orderby_options['date_oldest_to_newest'] = __( 'Oldest', 'mp_stacks_' . $meta_prefix );
 	$orderby_options['most_popular'] = __( 'Most Popular', 'mp_stacks_' . $meta_prefix );
 	$orderby_options['price_highest_to_lowest'] = __( 'Highest Price', 'mp_stacks_' . $meta_prefix );
 	$orderby_options['price_lowest_to_highest'] = __( 'Lowest Price', 'mp_stacks_' . $meta_prefix );
-	$orderby_options['date_newest_to_oldest'] = __( 'Newest', 'mp_stacks_' . $meta_prefix );
-	$orderby_options['date_oldest_to_newest'] = __( 'Oldest', 'mp_stacks_' . $meta_prefix );
 	$orderby_options['random'] = __( 'Random', 'mp_stacks_' . $meta_prefix );
 	
 	return $orderby_options;
