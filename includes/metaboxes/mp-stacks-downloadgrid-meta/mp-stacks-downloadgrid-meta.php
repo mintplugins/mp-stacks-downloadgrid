@@ -96,16 +96,12 @@ function mp_stacks_downloadgrid_create_meta_box(){
 			'field_type' 	=> 'showhider',
 			'field_value' => '',
 		),
-		'downloadgrid_order_by' => array(
-			'field_id'			=> 'downloadgrid_order_by',
+		'downloadgrid_default_orderby' => array(
+			'field_id'			=> 'downloadgrid_default_orderby',
 			'field_title' 	=> __( 'Order By', 'mp_stacks_downloadgrid'),
 			'field_description' 	=> __( 'How should these items be ordered by default?', 'mp_stacks_downloadgrid' ),
 			'field_type' 	=> 'select',
-			'field_select_values' => array( 
-				'date' => __( 'Date Posted', 'mp_stacks_downloadgrid' ),
-				'sales' => __( 'Most Sales', 'mp_stacks_downloadgrid' ),
-				'comments' => __( 'Most Comments', 'mp_stacks_downloadgrid' ),
-			),
+			'field_select_values' => apply_filters( 'downloadgrid' . '_isotope_orderby_options', array(), 'downloadgrid' ),	
 			'field_value' => 'date',
 			'field_showhider' => 'downloadgrid_layout_settings',
 		),
