@@ -115,6 +115,7 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 	//Setup the WP_Query args
 	$downloadgrid_args = array(
 		'order' => 'DESC',
+		'orderby' => 'date',
 		'paged' => 0,
 		'post_status' => 'publish',
 		'posts_per_page' => $downloadgrid_per_page,
@@ -129,8 +130,8 @@ function mp_stacks_downloadgrid_output( $post_id, $loading_more = false, $post_o
 	
 	//Set the order by options for the wp query
 	switch ( $orderby ) {
-		case 'popular':
-			$downloadgrid_args['orderby'] = 'meta_value_num date';
+		case 'most_popular':
+			$downloadgrid_args['orderby'] = 'meta_value meta_value_num date';
 			$downloadgrid_args['meta_key'] = '_edd_download_sales';
 			break;
 		case 'date_newest_to_oldest':
