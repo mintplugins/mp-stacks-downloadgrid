@@ -12,7 +12,7 @@
  * @package    MP Stacks DownloadGrid
  * @subpackage Functions
  *
- * @copyright  Copyright (c) 2015, Mint Plugins
+ * @copyright  Copyright (c) 2016, Mint Plugins
  * @license    http://opensource.org/licenses/gpl-2.0.php GNU Public License
  * @author     Philip Johnston
  */
@@ -451,7 +451,7 @@ function mp_stacks_downloadgrid_excerpt_css( $css_output, $post_id ){
 add_filter('mp_stacks_downloadgrid_css', 'mp_stacks_downloadgrid_excerpt_css', 10, 2);
 
 /**
- * Add the Google Fonts for the Grid Titles
+ * Add the Google Fonts for the Grid Excertpts
  *
  * @param    $css_output          String - The incoming CSS output coming from other things using this filter
  * @param    $post_id             Int - The post ID of the brick
